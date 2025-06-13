@@ -12,7 +12,9 @@ export default function HomePage() {
       </nav>
 
       <div className="flex-grow flex flex-col items-center justify-center text-center px-4">
-        <h1 className="text-5xl font-bold mb-4">Welcome to QueryNotes</h1>
+        <h1 className="text-5xl font-bold mb-4">
+          Welcome to <span className="text-indigo-600">Query</span>Notes
+        </h1>
         <p className="text-xl text-gray-600 mb-8">
           Don&apos;t just take notes. Query Them.
         </p>
