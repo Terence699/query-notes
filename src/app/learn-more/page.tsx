@@ -15,7 +15,7 @@ export default function LearnMorePage() {
           What is QueryNotes?
         </h1>
         <p className="text-xl text-center text-gray-600 mb-12">
-          Don't just take notes. <strong>Query Them.</strong>
+          Don&apos;t just take notes. <strong>Query Them.</strong>
         </p>
 
         <div className="space-y-10 text-lg leading-relaxed">
@@ -40,7 +40,7 @@ export default function LearnMorePage() {
           <section>
             <h2 className="text-2xl font-bold mb-3">Our Vision</h2>
             <p>
-              We're just getting started. Our roadmap includes rich text editing, collaboration features, advanced note organization with folders and tags, and even deeper AI integrations to help you connect ideas across your entire knowledge base.
+              We&apos;re just getting started. Our roadmap includes rich text editing, collaboration features, advanced note organization with folders and tags, and even deeper AI integrations to help you connect ideas across your entire knowledge base.
             </p>
           </section>
 

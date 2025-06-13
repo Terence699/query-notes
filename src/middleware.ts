@@ -1,12 +1,6 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-type CookieMethods = {
-  get: (name: string) => string | undefined;
-  set: (name: string, value: string, options: CookieOptions) => void;
-  remove: (name: string, options: CookieOptions) => void;
-}
-
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: {

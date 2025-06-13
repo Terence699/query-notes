@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { deepseek } from "@/lib/deepseek";
+import { createSmartProvider } from "@/lib/deepseek";
 import { generateText } from "ai";
 import { revalidatePath } from "next/cache";
 
@@ -22,12 +22,13 @@ export async function generateSummary(noteId: string) {
 
   const { content } = note;
 
-  // 2. Generate the summary using the DeepSeek API via AI SDK
+  // 2. Generate the summary using the AI provider with failover
   try {
+    const smartProvider = await createSmartProvider();
     const prompt = `请为以下文本生成一段简明扼要的摘要，摘要内容应该在100字以内，摘要语言和文本语言保持一致，直接输出摘要文本即可，不要包含任何"摘要："或"总结："这样的前缀词。文本内容如下：\n\n${content}`;
     
     const { text: summary } = await generateText({
-      model: deepseek.chat('deepseek-chat'),
+      model: smartProvider.getModel(),
       system: "You are a helpful assistant that summarizes text.",
       prompt,
     });
@@ -48,7 +49,7 @@ export async function generateSummary(noteId: string) {
     return { success: true, summary };
 
   } catch (e) {
-    console.error("Error generating summary with DeepSeek:", e);
+    console.error("Error generating summary with AI provider:", e);
     return { error: "Failed to generate summary." };
   }
 } 

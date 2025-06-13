@@ -5,7 +5,11 @@ interface Node {
     text?: string;
   }
   
-  export function getTextFromDoc(doc: any): string {
+  interface Document {
+    content?: Node[];
+  }
+  
+  export function getTextFromDoc(doc: Document | null | undefined): string {
     let text = '';
     
     if (doc && doc.content && Array.isArray(doc.content)) {

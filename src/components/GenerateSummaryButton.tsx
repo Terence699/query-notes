@@ -5,7 +5,7 @@ import { generateSummary } from '@/actions/deepseekActions';
 
 interface GenerateSummaryButtonProps {
   noteId: string;
-  noteContent: any; // The editor's JSON content
+  noteContent: string; // The editor's content as string
 }
 
 export default function GenerateSummaryButton({ noteId, noteContent }: GenerateSummaryButtonProps) {
@@ -20,7 +20,7 @@ export default function GenerateSummaryButton({ noteId, noteContent }: GenerateS
       if (result.error) {
         setError(result.error);
       }
-    } catch (e) {
+    } catch {
       setError('An unexpected error occurred.');
     } finally {
       setIsGenerating(false);

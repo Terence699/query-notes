@@ -7,7 +7,7 @@ import NotesList from '@/components/NotesList';
 type Note = {
   id: number;
   title: string | null;
-  content: any;
+  content: string | null;
   updated_at: string;
 };
 

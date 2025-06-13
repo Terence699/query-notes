@@ -1,6 +1,6 @@
 'use server';
 
-import { createSmartProvider, getPrimaryProvider, getFallbackProvider } from '@/lib/deepseek';
+import { createSmartProvider } from '@/lib/deepseek';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
@@ -10,7 +10,7 @@ const summarySchema = z.object({
   noteId: z.coerce.number().int().positive(),
 });
 
-export async function generateSummary(noteId: string, noteContent: any): Promise<{ error?: string }> {
+export async function generateSummary(noteId: string, noteContent: string): Promise<{ error?: string }> {
   const supabase = await createClient();
 
   // 1. Validate the noteId

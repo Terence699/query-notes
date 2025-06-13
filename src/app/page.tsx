@@ -14,7 +14,7 @@ export default function HomePage() {
       <div className="flex-grow flex flex-col items-center justify-center text-center px-4">
         <h1 className="text-5xl font-bold mb-4">Welcome to QueryNotes</h1>
         <p className="text-xl text-gray-600 mb-8">
-          Don't just take notes. Query Them.
+          Don&apos;t just take notes. Query Them.
         </p>
         <div className="flex justify-center gap-4">
           <GetStartedButton />

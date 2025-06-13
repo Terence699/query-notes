@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { searchNotes } from '@/actions/notes';
 
 // Search Icon Component
@@ -42,7 +42,7 @@ function ClearIcon() {
 type Note = {
   id: number;
   title: string | null;
-  content: any;
+  content: string | null;
   updated_at: string;
 };
 

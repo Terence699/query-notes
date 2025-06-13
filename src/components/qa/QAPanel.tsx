@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useChat } from 'ai/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -61,7 +61,7 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
             setMessages([]);
             setTimeout(() => inputRef.current?.focus(), 300);
         }
-    }, [isOpen]);
+    }, [isOpen, setMessages]);
 
     if (!isOpen) return null;
 
@@ -77,7 +77,7 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
                      <div className="flex items-center justify-center h-full text-gray-500 text-center">
                         <div>
                             <p className="mb-2">I can answer any questions about this note.</p>
-                            <p className="text-sm text-gray-400">e.g., "What is the main topic?"</p>
+                            <p className="text-sm text-gray-400">e.g., &quot;What is the main topic?&quot;</p>
                         </div>
                     </div>
                 ) : (

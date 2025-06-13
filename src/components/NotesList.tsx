@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 type Note = {
   id: number;
   title: string | null;
-  content: any;
+  content: string | null;
   updated_at: string;
 };
 
@@ -42,21 +42,10 @@ function formatDate(dateString: string) {
 /**
  * Extracts a text snippet from the note's content, which might be JSON.
  */
-function getContentSnippet(content: any): string {
+function getContentSnippet(content: string | null): string {
     if (!content) return "No additional content";
     if (typeof content === 'string') {
         return content.substring(0, 120);
-    }
-    // A simple attempt to parse content from a block-based editor
-    if (typeof content === 'object' && Array.isArray(content.content)) {
-        let text = "";
-        for (const block of content.content) {
-            if (block.type === 'paragraph' && Array.isArray(block.content)) {
-                text += block.content.map((n: { text?: string }) => n.text || '').join('');
-            }
-            if (text.length > 120) break;
-        }
-        return text.substring(0, 120) || "No additional content";
     }
     return "No additional content";
 }
@@ -198,7 +187,7 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
         <>
           <h2 className="text-xl font-semibold text-gray-700">Your notebook is empty</h2>
           <p className="mt-2 text-gray-500">
-            Click the "+ New Note" button to create your first one.
+            Click the &quot;+ New Note&quot; button to create your first one.
           </p>
         </>
       )}

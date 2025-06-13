@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { updateNote, updateNoteAutoSave } from "@/actions/notes";
+import { updateNoteAutoSave } from "@/actions/notes";
 import DeleteNoteButton from "@/components/DeleteNoteButton";
 import GenerateSummaryButton from "@/components/GenerateSummaryButton";
 import AutoGrowingTextarea from "@/components/AutoGrowingTextarea";
@@ -126,7 +126,7 @@ function RedoIcon() {
 export default function NoteEditor({ note }: { note: Note }) {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
   const [showSavedMessage, setShowSavedMessage] = useState(false);
   const autoSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedMessageTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -164,8 +164,6 @@ export default function NoteEditor({ note }: { note: Note }) {
       const result = await updateNoteAutoSave(formData);
       
       if (result.success) {
-        setLastSaved(new Date());
-        
         // Show saved message
         setShowSavedMessage(true);
         

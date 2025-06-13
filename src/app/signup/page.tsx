@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import Link from "next/link";
 
 export default async function Signup({
@@ -13,6 +12,7 @@ export default async function Signup({
   const signUp = async (formData: FormData) => {
     "use server";
 
+    const origin = process.env.NEXT_PUBLIC_SITE_URL;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const supabase = await createClient();
@@ -21,7 +21,7 @@ export default async function Signup({
       email,
       password,
       options: {
-        emailRedirectTo: `${new URL(process.env.NEXT_PUBLIC_SITE_URL!).origin}/auth/callback`,
+        emailRedirectTo: `${origin}/auth/callback`,
       },
     });
 
@@ -82,7 +82,7 @@ export default async function Signup({
           Sign Up
         </button>
         <Link href="/login" className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2 text-center">
-         Already have an account? Sign In
+          Already have an account? Sign In
         </Link>
         {params?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
