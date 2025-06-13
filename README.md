@@ -43,8 +43,8 @@ We are building a full-featured note-taking application inspired by the simplici
 * [X] TypeScript Type Safety
 
 **To-Do (Phase 1 Wrap-up):**
-* [ ] **End-to-End Testing:** Thoroughly test the user flow to ensure all features work as expected and verify app responsiveness.
-* [ ] **Production Deployment:** Deploy the application to Vercel to mark the official release of Phase 1.
+* [X] **End-to-End Testing:** Thoroughly test the user flow to ensure all features work as expected and verify app responsiveness.
+* [X] **Production Deployment:** Deploy the application to Vercel to mark the official release of Phase 1.
 * [ ] **UI/UX Refinement**: Continuously optimize visual design and interaction details.
 
 ### **Phase 2: Advanced Features & User Experience (Next Stage)**
