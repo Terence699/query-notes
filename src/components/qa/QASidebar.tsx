@@ -1,8 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { type CoreMessage } from 'ai';
-
 // Define the type for a session object
 type Session = {
   id: number;
