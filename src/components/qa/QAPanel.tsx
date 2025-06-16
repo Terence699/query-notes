@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useChat, type CoreMessage } from 'ai/react';
+import { useChat } from 'ai/react';
+import { type CoreMessage } from 'ai';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import QASidebar from './QASidebar';
