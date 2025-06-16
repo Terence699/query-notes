@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useChat } from 'ai/react';
-import { type CoreMessage } from 'ai';
+import { useChat, type Message } from 'ai/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import QASidebar from './QASidebar';
@@ -73,7 +72,7 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
     const [isHistoryLoading, setHistoryLoading] = useState(false);
     const [loadingSessionId, setLoadingSessionId] = useState<number | null>(null);
     // Temporary state to hold incoming session data to avoid race conditions with useChat hook
-    const [initialSession, setInitialSession] = useState<{ id: number; messages: CoreMessage[] } | null>(null);
+    const [initialSession, setInitialSession] = useState<{ id: number; messages: Message[] } | null>(null);
 
     // State for pre-fetching and caching the sessions list
     const [sessions, setSessions] = useState<Session[] | null>(null);
