@@ -239,4 +239,17 @@ This refactoring centralized data fetching logic in the parent component, enabli
 
 ---
 
+### **Record 8: Preventing Deployment Hell - The Importance of Prop Consistency**
+
+*   **Symptom:** After a series of refactors to improve performance (e.g., hoisting state from `QASidebar` to `QAPanel`), the application would compile locally but repeatedly fail during Vercel's deployment build process with various TypeScript errors (`unused variables`, `type mismatches`, etc.).
+*   **Root Cause:** The core issue was a lack of diligent "bookkeeping" after refactoring. When a child component's (`QASidebar`) responsibilities and its required props were changed, the corresponding call to it in the parent component (`QAPanel`) was not always updated in lockstep. This created a discrepancy where the parent tried to pass props that the child no longer accepted, leading to type errors that are strictly enforced by the production build process.
+*   **Solution:** A simple but critical process was enforced:
+    1.  **Atomic Refactoring:** Treat the modification of a component and its usage as a single, indivisible task.
+    2.  **Immediate Verification:** After changing a component's props interface, immediately go to every instance where that component is used and ensure the props being passed match the new definition.
+    3.  **Clean Imports:** Always remove unused imports as part of the refactoring process to keep files clean and avoid linter errors during builds.
+
+This disciplined approach ensures that the "contract" between parent and child components is always valid, preventing deployment-blocking type errors and saving significant time and frustration.
+
+---
+
 In the entire process, always refer to the [Next.js official documentation](https://nextjs.org/docs) to ensure the latest Next.js 15 best practices are used. 

@@ -195,7 +195,6 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
     return (
         <div className="fixed top-0 right-0 w-96 h-screen bg-white shadow-2xl border-l-2 border-gray-300 flex flex-col z-50">
             <QASidebar
-                noteId={noteId}
                 isOpen={isHistoryOpen}
                 onClose={() => setHistoryOpen(false)}
                 onLoadSession={handleLoadSession}
