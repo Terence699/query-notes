@@ -9,10 +9,7 @@ export async function POST(request: NextRequest) {
     const {
       email_to,
       confirmation_url,
-      email_action_type,
-      site_url,
-      token_hash,
-      redirect_to
+      email_action_type
     } = body;
 
     if (!email_to || !confirmation_url) {
