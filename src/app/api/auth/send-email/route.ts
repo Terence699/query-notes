@@ -102,7 +102,12 @@ export async function POST(request: NextRequest) {
     const confirmation_url = email_data.redirect_to;
     const email_action_type = email_data.email_action_type;
 
-    console.log('Extracted data:', { email_to, email_action_type, has_confirmation_url: !!confirmation_url });
+    console.log('Extracted data:', {
+      email_to,
+      email_action_type,
+      confirmation_url,
+      has_confirmation_url: !!confirmation_url
+    });
 
     if (!email_to || !confirmation_url) {
       console.error('Missing required fields:', { email_to: !!email_to, confirmation_url: !!confirmation_url });
