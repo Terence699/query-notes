@@ -64,7 +64,8 @@ export async function middleware(request: NextRequest) {
 
   // Define public paths that don't require authentication
   const publicPaths = ['/', '/login', '/signup', '/learn-more', '/auth/callback']
-  const isPublicPath = publicPaths.includes(request.nextUrl.pathname)
+  const isPublicPath = publicPaths.includes(request.nextUrl.pathname) ||
+                      request.nextUrl.pathname.startsWith('/api/')
 
   // Only redirect to login if user is not authenticated AND trying to access a protected route
   if (!user && !isPublicPath) {
