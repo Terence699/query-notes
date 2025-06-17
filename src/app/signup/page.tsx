@@ -18,16 +18,19 @@ function SignupContent() {
     setIsLoading(true);
     setError(null);
 
-    const origin = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+    // Use the configured site URL for production, fallback to current origin for development
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const supabase = createClient();
+
+    console.log('Signing up with redirect URL:', `${siteUrl}/auth/callback`);
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${origin}/auth/callback`,
+        emailRedirectTo: `${siteUrl}/auth/callback`,
       },
     });
 
