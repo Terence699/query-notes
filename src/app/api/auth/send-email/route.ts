@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // For debugging: temporarily disable webhook verification to see the actual payload
+    console.log('=== WEBHOOK DEBUG START ===');
     console.log('Raw payload received:', payload);
     console.log('Headers received:', Object.keys(headers));
     console.log('All headers:', headers);
@@ -60,7 +61,9 @@ export async function POST(request: NextRequest) {
     // verifiedData = wh.verify(payload, headers);
 
     console.log('Webhook received and verified successfully');
-    console.log('Verified data structure:', JSON.stringify(verifiedData, null, 2));
+    console.log('=== FULL PAYLOAD STRUCTURE ===');
+    console.log(JSON.stringify(verifiedData, null, 2));
+    console.log('=== END PAYLOAD STRUCTURE ===');
 
     // Extract data from the verified payload
     // Check if the data has the expected structure
@@ -102,12 +105,12 @@ export async function POST(request: NextRequest) {
     const confirmation_url = email_data.redirect_to;
     const email_action_type = email_data.email_action_type;
 
-    console.log('Extracted data:', {
-      email_to,
-      email_action_type,
-      confirmation_url,
-      has_confirmation_url: !!confirmation_url
-    });
+    console.log('=== EXTRACTED DATA ===');
+    console.log('Email to:', email_to);
+    console.log('Action type:', email_action_type);
+    console.log('Confirmation URL:', confirmation_url);
+    console.log('URL has code param:', confirmation_url?.includes('code='));
+    console.log('=== END EXTRACTED DATA ===');
 
     if (!email_to || !confirmation_url) {
       console.error('Missing required fields:', { email_to: !!email_to, confirmation_url: !!confirmation_url });
