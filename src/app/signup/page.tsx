@@ -1,24 +1,27 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+'use client';
 
-export default async function Signup({
-  searchParams,
-}: {
-  searchParams: Promise<{ message: string }>;
-}) {
-  const params = await searchParams;
+import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+export default function Signup() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Check if this is the email confirmation success state
-  const isEmailConfirmationSent = params?.message === "Check email to continue sign in process";
-  
-  const signUp = async (formData: FormData) => {
-    "use server";
+  const isEmailConfirmationSent = searchParams.get("message") === "Check email to continue sign in process";
 
-    const origin = process.env.NEXT_PUBLIC_SITE_URL;
+  const signUp = async (formData: FormData) => {
+    setIsLoading(true);
+    setError(null);
+
+    const origin = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const supabase = await createClient();
+    const supabase = createClient();
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -28,11 +31,15 @@ export default async function Signup({
       },
     });
 
+    setIsLoading(false);
+
     if (error) {
-      return redirect("/signup?message=Could not authenticate user");
+      console.error('Signup error:', error);
+      setError(error.message || "Could not authenticate user");
+      return;
     }
 
-    return redirect("/signup?message=Check email to continue sign in process");
+    router.push("/signup?message=Check email to continue sign in process");
   };
 
   return (
@@ -100,7 +107,7 @@ export default async function Signup({
                 <br />
                 2. Click the confirmation link
                 <br />
-                3. You&apos;ll be redirected back to sign in
+                3. You&apos;ll be automatically signed in and redirected to the homepage
               </p>
             </div>
 
@@ -116,7 +123,11 @@ export default async function Signup({
           // Regular signup form
           <form
             className="animate-in flex flex-col w-full gap-2 text-foreground"
-            action={signUp}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              await signUp(formData);
+            }}
           >
             <label className="text-md" htmlFor="email">
               Email
@@ -137,8 +148,12 @@ export default async function Signup({
               placeholder="••••••••"
               required
             />
-            <button className="bg-primary rounded-md px-4 py-2 text-primary-foreground mb-2 hover:opacity-90 transition-opacity">
-              Sign Up
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-primary rounded-md px-4 py-2 text-primary-foreground mb-2 hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              {isLoading ? "Signing Up..." : "Sign Up"}
             </button>
             <Link
               href="/login"
@@ -146,9 +161,9 @@ export default async function Signup({
             >
               Already have an account? Sign In
             </Link>
-            {params?.message && !isEmailConfirmationSent && (
+            {error && (
               <p className="mt-4 p-4 bg-red-50 border border-red-200 text-red-800 text-center rounded-md">
-                {params.message}
+                {error}
               </p>
             )}
           </form>

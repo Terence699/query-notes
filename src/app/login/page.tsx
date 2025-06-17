@@ -9,6 +9,15 @@ export default async function Login({
 }) {
   const params = await searchParams;
 
+  // Check if user is already authenticated
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // If user is authenticated and there's no signup success message, redirect to home
+  if (user && params?.message !== "signup_success") {
+    redirect("/");
+  }
+
   // Check for different message types
   const isSignupSuccess = params?.message === "signup_success";
   const isAuthError = params?.message === "auth_error";
