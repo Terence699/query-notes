@@ -102,8 +102,8 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
   if (isSearching) {
     return (
       <div className="flex items-center justify-center p-12">
-        <div className="flex items-center gap-3 text-gray-600">
-          <div className="w-6 h-6 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="flex items-center gap-3 text-muted-foreground">
+          <div className="w-6 h-6 border-2 border-border border-t-primary rounded-full animate-spin"></div>
           <span>Searching notes...</span>
         </div>
       </div>
@@ -138,17 +138,17 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedData.map((note) => (
             <Link key={note.id} href={`/notes/${note.id}`} className="block">
-              <div className="bg-card border border-border rounded-lg shadow-sm h-full flex flex-col p-4 hover:shadow-md transition-shadow duration-200">
-                <h3 className="font-semibold text-card-foreground truncate">
+              <div className="bg-card-gradient rounded-2xl shadow-md h-full flex flex-col p-4 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                <h3 className="font-semibold text-foreground truncate">
                   {note.title || "Untitled Note"}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-2 flex-grow line-clamp-3">
+                <p className="text-sm text-muted-foreground/70 mt-2 flex-grow line-clamp-2">
                   {getContentSnippet(note.content)}
                 </p>
-                <time className="text-xs text-muted-foreground opacity-70 mt-4 block">
+                <time className="text-xs text-muted-foreground/50 mt-4 block">
                   {formatDate(note.updated_at)}
                 </time>
               </div>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8fafc;
+            color: #1f2937;
+            transition: all 0.3s ease;
+        }
+        
+        .dark body {
+            background: #020617;
+            color: #f8fafc;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .dark .container {
+            background: #0f172a;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        .theme-toggle {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: #4338ca;
+        }
+        
+        .card {
+            background: linear-gradient(to bottom right, #eff6ff, #ffffff);
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .dark .card {
+            background: linear-gradient(to bottom right, #1e293b, #0f172a);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .dark .success {
+            background: #14532d;
+            color: #bbf7d0;
+            border: 1px solid #166534;
+        }
+        
+        .error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        
+        .dark .error {
+            background: #7f1d1d;
+            color: #fecaca;
+            border: 1px solid #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dark Mode Test</h1>
+        <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+        
+        <div class="status success" id="status">
+            ✅ Theme system is working correctly
+        </div>
+        
+        <div class="card">
+            <h3>Test Card</h3>
+            <p>This card should change colors when switching themes.</p>
+            <p>Light mode: Blue gradient background</p>
+            <p>Dark mode: Dark slate gradient background</p>
+        </div>
+        
+        <div class="card">
+            <h3>Color Variables Test</h3>
+            <p>Current theme: <span id="current-theme">light</span></p>
+            <p>Background should transition smoothly between themes.</p>
+        </div>
+        
+        <h2>Instructions for Testing QueryNotes</h2>
+        <ol>
+            <li>Open your QueryNotes application at <a href="http://localhost:3001" target="_blank">http://localhost:3001</a></li>
+            <li>Look for the theme toggle button (sun/moon icon) in the navigation</li>
+            <li>Click it to switch between light and dark modes</li>
+            <li>Verify that all elements change colors appropriately</li>
+            <li>Check that note cards use the new gradient system</li>
+            <li>Ensure text remains readable in both modes</li>
+        </ol>
+        
+        <h3>Expected Results</h3>
+        <ul>
+            <li>✅ Page background changes from light to dark</li>
+            <li>✅ Note cards use theme-aware gradients</li>
+            <li>✅ Text colors invert appropriately</li>
+            <li>✅ Borders and UI elements adapt to theme</li>
+            <li>✅ Theme preference persists across page reloads</li>
+        </ul>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            if (newTheme === 'dark') {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+            
+            document.getElementById('current-theme').textContent = newTheme;
+            localStorage.setItem('theme', newTheme);
+        }
+        
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+        document.getElementById('current-theme').textContent = savedTheme;
+    </script>
+</body>
+</html>

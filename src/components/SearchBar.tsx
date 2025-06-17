@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { searchNotes } from '@/actions/notes';
 
 // Search Icon Component
-function SearchIcon({ className = "h-5 w-5 text-gray-400" }: { className?: string }) {
+function SearchIcon({ className = "h-5 w-5 text-muted-foreground" }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@ function ClearIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-4 w-4 text-gray-400 hover:text-gray-600"
+      className="h-4 w-4 text-muted-foreground hover:text-foreground"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -93,46 +93,38 @@ export default function SearchBar({ onSearchResults, placeholder = "Search notes
 
   return (
     <div className="relative w-full max-w-lg">
-      <div className="flex gap-2">
-        <div className="relative flex-grow">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder={placeholder}
-            disabled={isSearching}
-            className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors disabled:bg-gray-50 disabled:text-gray-500"
-          />
-          {searchQuery && !isSearching && (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-              <button
-                onClick={handleClear}
-                className="hover:bg-gray-100 p-1 rounded-full transition-colors"
-                title="Clear search"
-              >
-                <ClearIcon />
-              </button>
-            </div>
+      <div className="relative">
+        {/* Search icon on the left */}
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          {isSearching ? (
+            <div className="w-4 h-4 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <SearchIcon className="h-4 w-4 text-muted-foreground" />
           )}
         </div>
-        <button
-          onClick={handleSearch}
+
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder={placeholder}
           disabled={isSearching}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors flex items-center gap-2 min-w-[100px] justify-center"
-        >
-          {isSearching ? (
-            <>
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>searching...</span>
-            </>
-          ) : (
-            <>
-              <SearchIcon className="h-4 w-4 text-white" />
-              <span>search</span>
-            </>
-          )}
-        </button>
+          className="w-full pl-10 pr-10 py-2.5 bg-background border border-border rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all duration-200 shadow-sm hover:shadow-md disabled:bg-muted disabled:text-muted-foreground text-foreground placeholder:text-muted-foreground"
+        />
+
+        {/* Clear button on the right */}
+        {searchQuery && !isSearching && (
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <button
+              onClick={handleClear}
+              className="hover:bg-muted p-1 rounded-full transition-colors"
+              title="Clear search"
+            >
+              <ClearIcon />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-family-mono: 'SF Mono', Monaco, 'Inconsolata', 'Roboto Mono', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+}
+
 /* Theme Variables */
 :root {
   /* Light theme colors */
@@ -24,6 +29,12 @@
   --color-card-foreground: 17 24 39; /* gray-900 */
   --color-popover: 255 255 255; /* white */
   --color-popover-foreground: 17 24 39; /* gray-900 */
+
+  /* Three-layer design colors */
+  --color-page-background: 248 250 252; /* slate-50 */
+  --color-canvas-background: 244 244 245; /* zinc-100 */
+  --color-card-gradient-from: 239 246 255; /* blue-50 */
+  --color-card-gradient-to: 255 255 255; /* white */
 }
 
 .dark {
@@ -49,6 +60,12 @@
   --color-card-foreground: 248 250 252; /* slate-50 */
   --color-popover: 15 23 42; /* slate-800 */
   --color-popover-foreground: 248 250 252; /* slate-50 */
+
+  /* Three-layer design colors for dark mode */
+  --color-page-background: 2 6 23; /* slate-950 */
+  --color-canvas-background: 15 23 42; /* slate-800 */
+  --color-card-gradient-from: 30 41 59; /* slate-700 */
+  --color-card-gradient-to: 15 23 42; /* slate-800 */
 }
 
 /* Custom utility classes for theme-aware styling */
@@ -100,9 +117,76 @@
   color: rgb(var(--color-secondary-foreground));
 }
 
+/* Three-layer design utility classes */
+.bg-page {
+  background-color: rgb(var(--color-page-background));
+}
+
+.bg-canvas {
+  background-color: rgb(var(--color-canvas-background));
+}
+
+.bg-card-gradient {
+  background: linear-gradient(to bottom right, rgb(var(--color-card-gradient-from)), rgb(var(--color-card-gradient-to)));
+}
+
 /* Smooth transitions for theme changes */
 * {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+/* Animation utilities for dropdowns and modals */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-in {
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+}
+
+.fade-in-0 {
+  animation-name: fade-in;
+}
+
+.zoom-in-95 {
+  animation-name: zoom-in;
+}
+
+.duration-200 {
+  animation-duration: 200ms;
+}
+
+/* Line clamp utilities for text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

@@ -33,7 +33,7 @@ export default async function Signup({
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
+    <div className="min-h-screen flex flex-col w-full px-8 sm:max-w-md mx-auto">
       <Link
         href="/"
         className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
@@ -55,10 +55,12 @@ export default async function Signup({
         Back
       </Link>
 
-      <form
-        className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-        action={signUp}
-      >
+      {/* Form positioned at 40% from top for better grounding */}
+      <div className="flex-1 flex items-start pt-[40vh] pb-16">
+        <form
+          className="animate-in flex flex-col w-full gap-2 text-foreground"
+          action={signUp}
+        >
         <label className="text-md" htmlFor="email">
           Email
         </label>
@@ -78,18 +80,22 @@ export default async function Signup({
           placeholder="••••••••"
           required
         />
-        <button className="bg-primary rounded-md px-4 py-2 text-primary-foreground mb-2 hover:opacity-90 transition-opacity">
-          Sign Up
-        </button>
-        <Link href="/login" className="border border-border rounded-md px-4 py-2 text-foreground mb-2 text-center hover:bg-muted transition-colors">
-          Already have an account? Sign In
-        </Link>
-        {params?.message && (
-          <p className="mt-4 p-4 bg-muted text-foreground text-center rounded-md">
-            {params.message}
-          </p>
-        )}
-      </form>
+          <button className="bg-primary rounded-md px-4 py-2 text-primary-foreground mb-2 hover:opacity-90 transition-opacity">
+            Sign Up
+          </button>
+          <Link
+            href="/login"
+            className="border border-primary/30 rounded-md px-4 py-2 text-primary mb-2 text-center hover:bg-primary/5 hover:border-primary/50 transition-all"
+          >
+            Already have an account? Sign In
+          </Link>
+          {params?.message && (
+            <p className="mt-4 p-4 bg-muted text-foreground text-center rounded-md">
+              {params.message}
+            </p>
+          )}
+        </form>
+      </div>
     </div>
   );
 } 

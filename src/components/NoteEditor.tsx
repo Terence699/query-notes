@@ -299,7 +299,7 @@ export default function NoteEditor({ note }: { note: Note }) {
                   disabled={isSaving}
                   className="bg-primary hover:opacity-90 disabled:opacity-50 text-primary-foreground font-semibold py-2 px-4 rounded-md text-sm transition-opacity"
                 >
-                  {isSaving ? 'Saving...' : 'Save Now'}
+                  {isSaving ? 'Saving...' : 'Save'}
                 </button>
               </div>
         </NoteEditorNavigation>

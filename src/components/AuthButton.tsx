@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { LogoutButton } from './LogoutButton';
+import UserDropdown from './UserDropdown';
 import type { User } from '@supabase/supabase-js';
 
 export default function AuthButton() {
@@ -26,10 +26,7 @@ export default function AuthButton() {
   }
 
   return user ? (
-    <div className="flex items-center gap-4 text-foreground">
-      Hey, {user.email}
-      <LogoutButton />
-    </div>
+    <UserDropdown user={user} />
   ) : (
     <Link
       href="/login"

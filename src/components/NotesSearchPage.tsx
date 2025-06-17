@@ -29,10 +29,10 @@ export default function NotesSearchPage({ initialNotes }: NotesSearchPageProps) 
   };
 
   return (
-    <>
+    <div className="pt-8">
       {/* Search Bar Section */}
-      <div className="mb-6 flex justify-center">
-        <SearchBar 
+      <div className="mb-8 flex justify-center">
+        <SearchBar
           onSearchResults={handleSearchResults}
           placeholder="Search notes by title..."
           onClearSearch={handleClearSearch}
@@ -40,12 +40,12 @@ export default function NotesSearchPage({ initialNotes }: NotesSearchPageProps) 
       </div>
 
       {/* Notes List */}
-      <NotesList 
+      <NotesList
         initialNotes={initialNotes}
         searchResults={searchResults}
         isSearching={isSearching}
         onClearSearch={handleClearSearch}
       />
-    </>
+    </div>
   );
 } 

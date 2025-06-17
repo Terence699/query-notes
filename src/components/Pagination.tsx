@@ -47,7 +47,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-500"
+        className="px-4 py-2.5 text-sm font-medium text-muted-foreground bg-background border border-border rounded-xl hover:bg-muted hover:text-primary hover:border-primary/70 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-muted-foreground transition-all duration-200"
       >
         Previous
       </button>
@@ -57,14 +57,14 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         {visiblePages.map((page, index) => (
           <div key={index}>
             {page === '...' ? (
-              <span className="px-3 py-2 text-sm font-medium text-gray-500">...</span>
+              <span className="px-3 py-2 text-sm font-medium text-muted-foreground">...</span>
             ) : (
               <button
                 onClick={() => onPageChange(page as number)}
-                className={`px-3 py-2 text-sm font-medium rounded-md ${
+                className={`px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${
                   currentPage === page
-                    ? 'bg-blue-600 text-white border border-blue-600'
-                    : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-primary text-primary-foreground shadow-md hover:shadow-lg hover:opacity-90'
+                    : 'text-foreground bg-background border border-border hover:bg-muted hover:text-primary hover:border-primary/70 shadow-sm hover:shadow-md'
                 }`}
               >
                 {page}
@@ -75,7 +75,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       </div>
 
       {/* Mobile page indicator */}
-      <div className="sm:hidden px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md">
+      <div className="sm:hidden px-4 py-2.5 text-sm font-medium text-foreground bg-background border border-border rounded-xl shadow-sm">
         {currentPage} of {totalPages}
       </div>
 
@@ -83,7 +83,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-500"
+        className="px-4 py-2.5 text-sm font-medium text-muted-foreground bg-background border border-border rounded-xl hover:bg-muted hover:text-primary hover:border-primary/70 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-muted-foreground transition-all duration-200"
       >
         Next
       </button>
