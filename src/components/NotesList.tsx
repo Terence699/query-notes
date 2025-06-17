@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePagination } from '@/hooks/usePagination';
 import Pagination from '@/components/Pagination';
+import { NewNoteButton } from '@/components/NewNoteButton';
 import { useEffect, useState, useRef } from 'react';
 
 type Note = {
@@ -17,6 +18,7 @@ interface NotesListProps {
   searchResults?: Note[];
   isSearching?: boolean;
   onClearSearch?: () => void;
+  createNoteAction: () => Promise<void>;
 }
 
 /**
@@ -50,7 +52,7 @@ function getContentSnippet(content: string | null): string {
     return "No additional content";
 }
 
-export default function NotesList({ initialNotes, searchResults, isSearching, onClearSearch }: NotesListProps) {
+export default function NotesList({ initialNotes, searchResults, isSearching, onClearSearch, createNoteAction }: NotesListProps) {
   // Use search results if available, otherwise use initial notes
   const notesToDisplay = searchResults !== undefined ? searchResults : initialNotes;
   const showSearchMessage = searchResults !== undefined && searchResults !== null;
@@ -121,20 +123,34 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
                 <span className="opacity-70"> • Page {currentPage} of {totalPages}</span>
               )}
             </div>
-            {onClearSearch && (
-              <button
-                onClick={onClearSearch}
-                className="text-sm text-primary hover:opacity-80 font-medium transition-opacity"
-              >
-                ← Back to all notes
-              </button>
-            )}
+            <div className="flex items-center gap-3">
+              <form action={createNoteAction}>
+                <NewNoteButton />
+              </form>
+              {onClearSearch && (
+                <button
+                  onClick={onClearSearch}
+                  className="text-sm text-primary hover:opacity-80 font-medium transition-opacity"
+                >
+                  ← Back to all notes
+                </button>
+              )}
+            </div>
           </div>
         )}
-        
-        {!showSearchMessage && totalPages > 1 && (
-          <div className="mb-4 text-sm text-muted-foreground">
-            Showing {paginatedData.length} of {notesToDisplay.length} notes • Page {currentPage} of {totalPages}
+
+        {!showSearchMessage && (
+          <div className="mb-4 flex items-center justify-between">
+            <div className="text-sm text-muted-foreground">
+              {totalPages > 1 ? (
+                <>Showing {paginatedData.length} of {notesToDisplay.length} notes • Page {currentPage} of {totalPages}</>
+              ) : (
+                <>Showing {notesToDisplay.length} note{notesToDisplay.length !== 1 ? 's' : ''}</>
+              )}
+            </div>
+            <form action={createNoteAction}>
+              <NewNoteButton />
+            </form>
           </div>
         )}
 
@@ -174,21 +190,31 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
           <p className="mt-2 text-muted-foreground">
             Try searching with different keywords or create a new note.
           </p>
-          {onClearSearch && (
-            <button
-              onClick={onClearSearch}
-              className="mt-4 text-primary hover:opacity-80 font-medium transition-opacity"
-            >
-              ← Back to all notes
-            </button>
-          )}
+          <div className="mt-6 flex items-center justify-center gap-4">
+            <form action={createNoteAction}>
+              <NewNoteButton />
+            </form>
+            {onClearSearch && (
+              <button
+                onClick={onClearSearch}
+                className="text-primary hover:opacity-80 font-medium transition-opacity"
+              >
+                ← Back to all notes
+              </button>
+            )}
+          </div>
         </>
       ) : (
         <>
           <h2 className="text-xl font-semibold text-card-foreground">Your notebook is empty</h2>
           <p className="mt-2 text-muted-foreground">
-            Click the &quot;+ New Note&quot; button to create your first one.
+            Click the "+" button below to create your first note.
           </p>
+          <div className="mt-6">
+            <form action={createNoteAction}>
+              <NewNoteButton />
+            </form>
+          </div>
         </>
       )}
     </div>

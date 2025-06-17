@@ -13,9 +13,10 @@ type Note = {
 
 interface NotesSearchPageProps {
   initialNotes: Note[];
+  createNoteAction: () => Promise<void>;
 }
 
-export default function NotesSearchPage({ initialNotes }: NotesSearchPageProps) {
+export default function NotesSearchPage({ initialNotes, createNoteAction }: NotesSearchPageProps) {
   const [searchResults, setSearchResults] = useState<Note[] | undefined>(undefined);
   const [isSearching, setIsSearching] = useState(false);
 
@@ -45,6 +46,7 @@ export default function NotesSearchPage({ initialNotes }: NotesSearchPageProps) 
         searchResults={searchResults}
         isSearching={isSearching}
         onClearSearch={handleClearSearch}
+        createNoteAction={createNoteAction}
       />
     </div>
   );

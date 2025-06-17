@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { createNote } from "@/actions/notes";
 import NotesSearchPage from "@/components/NotesSearchPage";
-import { NewNoteButton } from "@/components/NewNoteButton";
 import Navigation from "@/components/Navigation";
 import { Note } from "@/types/note";
 
@@ -81,15 +80,11 @@ export default function NotesPage() {
   return (
     <div className="flex-1 w-full flex flex-col">
       {/* Page Header */}
-      <Navigation showHomeLink={true} title="Notes">
-        <form action={createNote}>
-          <NewNoteButton />
-        </form>
-      </Navigation>
+      <Navigation showHomeLink={true} title="Notes" />
 
       {/* Page Content with Search */}
       <main className="w-full max-w-5xl mx-auto p-4 flex-grow">
-        <NotesSearchPage initialNotes={notes || []} />
+        <NotesSearchPage initialNotes={notes || []} createNoteAction={createNote} />
       </main>
     </div>
   );
