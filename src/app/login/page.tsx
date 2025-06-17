@@ -8,6 +8,11 @@ export default async function Login({
   searchParams: Promise<{ message: string }>;
 }) {
   const params = await searchParams;
+
+  // Check for different message types
+  const isSignupSuccess = params?.message === "signup_success";
+  const isAuthError = params?.message === "auth_error";
+  const isLoginError = params?.message === "Could not authenticate user";
   
   const signIn = async (formData: FormData) => {
     "use server";
@@ -51,46 +56,81 @@ export default async function Login({
         Back
       </Link>
 
-      {/* Form positioned at 40% from top for better grounding */}
-      <div className="flex-1 flex items-start pt-[40vh] pb-16">
-        <form
-          className="animate-in flex flex-col w-full gap-2 text-foreground"
-          action={signIn}
-        >
-        <label className="text-md" htmlFor="email">
-          Email
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-background border border-border text-foreground mb-6 focus:outline-none focus:ring-2 focus:ring-primary"
-          name="email"
-          placeholder="you@example.com"
-          required
-        />
-        <label className="text-md" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-background border border-border text-foreground mb-6 focus:outline-none focus:ring-2 focus:ring-primary"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        />
-          <button className="bg-primary rounded-md px-4 py-2 text-primary-foreground mb-2 hover:opacity-90 transition-opacity">
-            Sign In
-          </button>
-          <Link
-            href="/signup"
-            className="border border-primary/30 rounded-md px-4 py-2 text-primary mb-2 text-center hover:bg-primary/5 hover:border-primary/50 transition-all"
-          >
-            Sign Up
-          </Link>
-          {params?.message && (
-            <p className="mt-4 p-4 bg-muted text-foreground text-center rounded-md">
-              {params.message}
-            </p>
+      {/* Main content area - properly centered */}
+      <div className="flex-1 flex items-center justify-center py-16">
+        <div className="w-full space-y-6">
+          {/* Success message for email confirmation */}
+          {isSignupSuccess && (
+            <div className="animate-in">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
+                <div className="flex-shrink-0">
+                  <svg
+                    className="w-5 h-5 text-green-600 mt-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-green-800">
+                    🎉 You&apos;ve successfully signed up!
+                  </h3>
+                  <p className="text-sm text-green-700 mt-1">
+                    Please sign in with your account to get started.
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
-        </form>
+          {/* Login form */}
+          <form
+            className="animate-in flex flex-col w-full gap-2 text-foreground"
+            action={signIn}
+          >
+            <label className="text-md" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="rounded-md px-4 py-2 bg-background border border-border text-foreground mb-6 focus:outline-none focus:ring-2 focus:ring-primary"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
+            <label className="text-md" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="rounded-md px-4 py-2 bg-background border border-border text-foreground mb-6 focus:outline-none focus:ring-2 focus:ring-primary"
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              required
+            />
+            <button className="bg-primary rounded-md px-4 py-2 text-primary-foreground mb-2 hover:opacity-90 transition-opacity">
+              Sign In
+            </button>
+            <Link
+              href="/signup"
+              className="border border-primary/30 rounded-md px-4 py-2 text-primary mb-2 text-center hover:bg-primary/5 hover:border-primary/50 transition-all"
+            >
+              Sign Up
+            </Link>
+            {/* Error messages */}
+            {(isLoginError || isAuthError) && (
+              <p className="mt-4 p-4 bg-red-50 border border-red-200 text-red-800 text-center rounded-md">
+                {isAuthError ? "There was an error with email confirmation. Please try signing up again." : params.message}
+              </p>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );
