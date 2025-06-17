@@ -60,7 +60,7 @@ export async function sendEmail({
       to,
       subject,
       html,
-      reply_to: replyTo,
+      replyTo,
     });
     
     if (error) {

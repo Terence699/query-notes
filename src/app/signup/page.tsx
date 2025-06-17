@@ -2,10 +2,10 @@
 
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Signup() {
+function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -171,4 +171,12 @@ export default function Signup() {
       </div>
     </div>
   );
-} 
+}
+
+export default function Signup() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupContent />
+    </Suspense>
+  );
+}

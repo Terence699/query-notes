@@ -4,9 +4,9 @@ import GetStartedButton from "@/components/GetStartedButton";
 import Navigation from "@/components/Navigation";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
-export default function HomePage() {
+function HomePageContent() {
   const searchParams = useSearchParams();
   const [showWelcome, setShowWelcome] = useState(false);
 
@@ -85,6 +85,14 @@ export default function HomePage() {
         <p className="text-sm text-muted-foreground">Build by Yifu Yuan</p>
       </footer>
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomePageContent />
+    </Suspense>
   );
 }
 
