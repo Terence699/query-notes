@@ -32,11 +32,11 @@ export default function GenerateSummaryButton({ noteId, noteContent }: GenerateS
         <button
             onClick={handleClick}
             disabled={isGenerating}
-            className="px-3 py-1.5 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            className="px-3 py-1.5 text-sm font-semibold text-primary-foreground bg-primary rounded-md hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
         >
             {isGenerating ? '✨ Generating Summary...' : '✨ Generate Summary'}
         </button>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
     </div>
   );
 } 

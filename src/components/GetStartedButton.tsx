@@ -24,7 +24,7 @@ export default function GetStartedButton() {
 
   if (loading) {
     return (
-      <div className="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-lg shadow-md animate-pulse">
+      <div className="px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg shadow-md animate-pulse">
         Get started
       </div>
     );
@@ -33,7 +33,7 @@ export default function GetStartedButton() {
   return (
     <Link
       href={getStartedLink}
-      className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition"
+      className="px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg shadow-md hover:opacity-90 transition"
     >
       Get started
     </Link>

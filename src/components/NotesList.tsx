@@ -115,16 +115,16 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
       <div>
         {showSearchMessage && (
           <div className="mb-4 flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               Found {notesToDisplay.length} note{notesToDisplay.length !== 1 ? 's' : ''}
               {totalPages > 1 && (
-                <span className="text-gray-400"> • Page {currentPage} of {totalPages}</span>
+                <span className="opacity-70"> • Page {currentPage} of {totalPages}</span>
               )}
             </div>
             {onClearSearch && (
               <button
                 onClick={onClearSearch}
-                className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                className="text-sm text-primary hover:opacity-80 font-medium transition-opacity"
               >
                 ← Back to all notes
               </button>
@@ -133,7 +133,7 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
         )}
         
         {!showSearchMessage && totalPages > 1 && (
-          <div className="mb-4 text-sm text-gray-600">
+          <div className="mb-4 text-sm text-muted-foreground">
             Showing {paginatedData.length} of {notesToDisplay.length} notes • Page {currentPage} of {totalPages}
           </div>
         )}
@@ -141,14 +141,14 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {paginatedData.map((note) => (
             <Link key={note.id} href={`/notes/${note.id}`} className="block">
-              <div className="bg-white border rounded-lg shadow-sm h-full flex flex-col p-4 hover:shadow-md transition-shadow duration-200">
-                <h3 className="font-semibold text-gray-800 truncate">
+              <div className="bg-card border border-border rounded-lg shadow-sm h-full flex flex-col p-4 hover:shadow-md transition-shadow duration-200">
+                <h3 className="font-semibold text-card-foreground truncate">
                   {note.title || "Untitled Note"}
                 </h3>
-                <p className="text-sm text-gray-600 mt-2 flex-grow line-clamp-3">
+                <p className="text-sm text-muted-foreground mt-2 flex-grow line-clamp-3">
                   {getContentSnippet(note.content)}
                 </p>
-                <time className="text-xs text-gray-400 mt-4 block">
+                <time className="text-xs text-muted-foreground opacity-70 mt-4 block">
                   {formatDate(note.updated_at)}
                 </time>
               </div>
@@ -167,17 +167,17 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
 
   // Empty state
   return (
-    <div className="text-center p-12 bg-white border rounded-lg shadow-sm">
+    <div className="text-center p-12 bg-card border border-border rounded-lg shadow-sm">
       {showSearchMessage ? (
         <>
-          <h2 className="text-xl font-semibold text-gray-700">No notes found</h2>
-          <p className="mt-2 text-gray-500">
+          <h2 className="text-xl font-semibold text-card-foreground">No notes found</h2>
+          <p className="mt-2 text-muted-foreground">
             Try searching with different keywords or create a new note.
           </p>
           {onClearSearch && (
             <button
               onClick={onClearSearch}
-              className="mt-4 text-blue-600 hover:text-blue-800 font-medium transition-colors"
+              className="mt-4 text-primary hover:opacity-80 font-medium transition-opacity"
             >
               ← Back to all notes
             </button>
@@ -185,8 +185,8 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
         </>
       ) : (
         <>
-          <h2 className="text-xl font-semibold text-gray-700">Your notebook is empty</h2>
-          <p className="mt-2 text-gray-500">
+          <h2 className="text-xl font-semibold text-card-foreground">Your notebook is empty</h2>
+          <p className="mt-2 text-muted-foreground">
             Click the &quot;+ New Note&quot; button to create your first one.
           </p>
         </>

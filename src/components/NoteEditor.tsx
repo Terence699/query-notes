@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
 import { updateNoteAutoSave } from "@/actions/notes";
 import DeleteNoteButton from "@/components/DeleteNoteButton";
 import GenerateSummaryButton from "@/components/GenerateSummaryButton";
 import AutoGrowingTextarea from "@/components/AutoGrowingTextarea";
 import QAPanel from "@/components/qa/QAPanel";
+import NoteEditorNavigation from "@/components/NoteEditorNavigation";
 
 // Define the shape of the note object
 type Note = {
@@ -251,29 +251,24 @@ export default function NoteEditor({ note }: { note: Note }) {
       {/* Main Content Area */}
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isPanelOpen ? "mr-96" : "mr-0"}`}>
         {/* Page Header */}
-        <header className="sticky top-0 z-50 w-full border-b border-b-foreground/10 flex-shrink-0 bg-white">
-          <div className="w-full flex justify-between items-center p-3 text-sm px-6">
-            <Link href="/notes" className="flex items-center gap-1 text-gray-600 hover:text-gray-800">
-              &larr; Back to Notes
-            </Link>
-            <div className="flex items-center gap-4">
+        <NoteEditorNavigation>
               {/* Undo/Redo Buttons */}
-              <div className="flex items-center gap-1 border border-gray-300 rounded-md">
+              <div className="flex items-center gap-1 border border-border rounded-md">
                 <button
                   type="button"
                   onClick={undo}
                   disabled={!canUndo}
-                  className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   title="Undo (Ctrl+Z)"
                 >
                   <UndoIcon />
                 </button>
-                <div className="w-px h-6 bg-gray-300"></div>
+                <div className="w-px h-6 bg-border"></div>
                 <button
                   type="button"
                   onClick={redo}
                   disabled={!canRedo}
-                  className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   title="Redo (Ctrl+Y)"
                 >
                   <RedoIcon />
@@ -285,63 +280,61 @@ export default function NoteEditor({ note }: { note: Note }) {
               {/* Auto-save status */}
               <div className="flex items-center gap-2">
                 {isSaving && (
-                  <div className="flex items-center gap-1 text-sm text-gray-600">
-                    <div className="w-3 h-3 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                    <div className="w-3 h-3 border-2 border-border border-t-primary rounded-full animate-spin"></div>
                     Saving...
                   </div>
                 )}
                 {showSavedMessage && !isSaving && (
-                  <div className="text-sm text-green-600">
+                  <div className="text-sm text-green-600 dark:text-green-400">
                     Note saved successfully
                   </div>
                 )}
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={() => {
                     // Use the same autoSave logic to prevent page refresh
                     autoSave();
                   }}
                   disabled={isSaving}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 px-4 rounded-md text-sm transition-colors"
+                  className="bg-primary hover:opacity-90 disabled:opacity-50 text-primary-foreground font-semibold py-2 px-4 rounded-md text-sm transition-opacity"
                 >
                   {isSaving ? 'Saving...' : 'Save Now'}
                 </button>
               </div>
-            </div>
-          </div>
-        </header>
+        </NoteEditorNavigation>
 
         {/* Editor */}
         <main className="flex-grow p-6 overflow-y-auto">
           <div className="max-w-4xl mx-auto flex flex-col h-full">
             <div className="mb-6">
               <div className="flex flex-col items-start gap-4">
-                <h2 className="text-xl font-semibold">AI Summary</h2>
+                <h2 className="text-xl font-semibold text-foreground">AI Summary</h2>
                 {note.summary ? (
-                  <div className="prose prose-sm max-w-none p-4 bg-gray-50 rounded-md border w-full">
+                  <div className="prose prose-sm max-w-none p-4 bg-muted rounded-md border border-border w-full text-foreground">
                     <p>{note.summary}</p>
                   </div>
                 ) : (
-                  <div className="w-full p-4 bg-blue-50 text-blue-800 rounded-md border border-blue-200">
+                  <div className="w-full p-4 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-md border border-blue-200 dark:border-blue-800">
                     No summary yet. Click the button to generate one.
                   </div>
                 )}
                 <GenerateSummaryButton noteId={note.id.toString()} noteContent={currentState.content} />
               </div>
             </div>
-            <div className="h-px bg-gray-200 my-8"></div>
+            <div className="h-px bg-border my-8"></div>
             <div className="flex-grow flex flex-col">
-              <input 
+              <input
                 value={currentState.title}
                 onChange={handleTitleChange}
-                placeholder="Untitled Note" 
-                className="text-2xl font-bold p-2 mb-4 bg-transparent focus:outline-none" 
+                placeholder="Untitled Note"
+                className="text-2xl font-bold p-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
               />
-              <AutoGrowingTextarea 
+              <AutoGrowingTextarea
                 value={currentState.content}
                 onChange={handleContentChange}
-                placeholder="Start writing..." 
-                className="flex-grow w-full p-2 bg-transparent focus:outline-none resize-none border-none"
+                placeholder="Start writing..."
+                className="flex-grow w-full p-2 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none resize-none border-none"
               />
             </div>
           </div>
@@ -352,7 +345,7 @@ export default function NoteEditor({ note }: { note: Note }) {
       {!isPanelOpen && (
         <button
           onClick={() => setIsPanelOpen(true)}
-          className="fixed bottom-8 right-8 z-40 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform hover:scale-110"
+          className="fixed bottom-8 right-8 z-40 bg-primary text-primary-foreground p-4 rounded-full shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all hover:scale-110"
           title="Ask about this note"
         >
           <ChatIcon />

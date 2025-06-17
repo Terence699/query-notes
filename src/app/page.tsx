@@ -1,28 +1,26 @@
-import AuthButton from "@/components/AuthButton";
+'use client';
+
 import GetStartedButton from "@/components/GetStartedButton";
+import Navigation from "@/components/Navigation";
 import Link from "next/link";
 
 export default function HomePage() {
   return (
     <div className="flex flex-col w-full h-screen">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-        <div className="w-full max-w-4xl flex justify-end items-center p-3 text-sm">
-          <AuthButton />
-        </div>
-      </nav>
+      <Navigation />
 
       <div className="flex-grow flex flex-col items-center justify-center text-center px-4">
-        <h1 className="text-5xl font-bold mb-4">
-          Welcome to <span className="text-indigo-600">Query</span>Notes
+        <h1 className="text-5xl font-bold mb-4 text-foreground">
+          Welcome to <span className="text-primary">Query</span>Notes
         </h1>
-        <p className="text-xl text-gray-600 mb-8">
+        <p className="text-xl text-muted-foreground mb-8">
           Don&apos;t just take notes. Query Them.
         </p>
         <div className="flex justify-center gap-4">
           <GetStartedButton />
           <Link
             href="/learn-more"
-            className="px-6 py-3 bg-white text-indigo-600 font-semibold rounded-lg border border-indigo-600 shadow-md hover:bg-gray-100 transition"
+            className="px-6 py-3 bg-background text-primary font-semibold rounded-lg border border-primary shadow-md hover:bg-muted transition"
           >
             Learn more →
           </Link>
@@ -30,7 +28,7 @@ export default function HomePage() {
       </div>
       
       <footer className="w-full flex justify-center p-4">
-        <p className="text-sm text-gray-500">Build by Yifu Yuan</p>
+        <p className="text-sm text-muted-foreground">Build by Yifu Yuan</p>
       </footer>
     </div>
   );

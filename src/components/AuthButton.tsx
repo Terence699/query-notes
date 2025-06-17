@@ -22,18 +22,18 @@ export default function AuthButton() {
   }, []);
 
   if (loading) {
-    return <div className="py-2 px-4 rounded-md bg-gray-200 animate-pulse w-28"></div>;
+    return <div className="py-2 px-4 rounded-md bg-muted animate-pulse w-28"></div>;
   }
 
   return user ? (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 text-foreground">
       Hey, {user.email}
       <LogoutButton />
     </div>
   ) : (
     <Link
       href="/login"
-      className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
+      className="py-2 px-3 flex rounded-md no-underline bg-secondary text-secondary-foreground hover:bg-muted transition-colors"
     >
       Login
     </Link>

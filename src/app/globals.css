@@ -1,1 +1,108 @@
 @import "tailwindcss";
+
+/* Theme Variables */
+:root {
+  /* Light theme colors */
+  --color-background: 255 255 255; /* white */
+  --color-foreground: 17 24 39; /* gray-900 */
+  --color-muted: 249 250 251; /* gray-50 */
+  --color-muted-foreground: 107 114 128; /* gray-500 */
+  --color-border: 229 231 235; /* gray-200 */
+  --color-input: 255 255 255; /* white */
+  --color-primary: 79 70 229; /* indigo-600 */
+  --color-primary-foreground: 255 255 255; /* white */
+  --color-secondary: 243 244 246; /* gray-100 */
+  --color-secondary-foreground: 17 24 39; /* gray-900 */
+  --color-accent: 243 244 246; /* gray-100 */
+  --color-accent-foreground: 17 24 39; /* gray-900 */
+  --color-destructive: 239 68 68; /* red-500 */
+  --color-destructive-foreground: 255 255 255; /* white */
+  --color-ring: 79 70 229; /* indigo-600 */
+
+  /* Semantic colors */
+  --color-card: 255 255 255; /* white */
+  --color-card-foreground: 17 24 39; /* gray-900 */
+  --color-popover: 255 255 255; /* white */
+  --color-popover-foreground: 17 24 39; /* gray-900 */
+}
+
+.dark {
+  /* Dark theme colors */
+  --color-background: 3 7 18; /* slate-950 */
+  --color-foreground: 248 250 252; /* slate-50 */
+  --color-muted: 15 23 42; /* slate-800 */
+  --color-muted-foreground: 148 163 184; /* slate-400 */
+  --color-border: 30 41 59; /* slate-700 */
+  --color-input: 15 23 42; /* slate-800 */
+  --color-primary: 99 102 241; /* indigo-500 */
+  --color-primary-foreground: 248 250 252; /* slate-50 */
+  --color-secondary: 30 41 59; /* slate-700 */
+  --color-secondary-foreground: 248 250 252; /* slate-50 */
+  --color-accent: 30 41 59; /* slate-700 */
+  --color-accent-foreground: 248 250 252; /* slate-50 */
+  --color-destructive: 239 68 68; /* red-500 */
+  --color-destructive-foreground: 248 250 252; /* slate-50 */
+  --color-ring: 99 102 241; /* indigo-500 */
+
+  /* Semantic colors */
+  --color-card: 15 23 42; /* slate-800 */
+  --color-card-foreground: 248 250 252; /* slate-50 */
+  --color-popover: 15 23 42; /* slate-800 */
+  --color-popover-foreground: 248 250 252; /* slate-50 */
+}
+
+/* Custom utility classes for theme-aware styling */
+.bg-background {
+  background-color: rgb(var(--color-background));
+}
+
+.text-foreground {
+  color: rgb(var(--color-foreground));
+}
+
+.bg-muted {
+  background-color: rgb(var(--color-muted));
+}
+
+.text-muted-foreground {
+  color: rgb(var(--color-muted-foreground));
+}
+
+.border-border {
+  border-color: rgb(var(--color-border));
+}
+
+.bg-card {
+  background-color: rgb(var(--color-card));
+}
+
+.text-card-foreground {
+  color: rgb(var(--color-card-foreground));
+}
+
+.bg-primary {
+  background-color: rgb(var(--color-primary));
+}
+
+.text-primary {
+  color: rgb(var(--color-primary));
+}
+
+.text-primary-foreground {
+  color: rgb(var(--color-primary-foreground));
+}
+
+.bg-secondary {
+  background-color: rgb(var(--color-secondary));
+}
+
+.text-secondary-foreground {
+  color: rgb(var(--color-secondary-foreground));
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}

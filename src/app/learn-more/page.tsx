@@ -1,33 +1,31 @@
+'use client';
+
 import Link from 'next/link';
-import AuthButton from '@/components/AuthButton';
+import Navigation from '@/components/Navigation';
 
 export default function LearnMorePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white text-gray-800">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-        <div className="w-full max-w-4xl flex justify-end items-center p-3 text-sm">
-          <AuthButton />
-        </div>
-      </nav>
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
+      <Navigation />
 
       <main className="flex-grow w-full max-w-4xl mx-auto px-6 py-12 md:py-20">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center text-foreground">
           What is QueryNotes?
         </h1>
-        <p className="text-xl text-center text-gray-600 mb-12">
+        <p className="text-xl text-center text-muted-foreground mb-12">
           Don&apos;t just take notes. <strong>Query Them.</strong>
         </p>
 
         <div className="space-y-10 text-lg leading-relaxed">
           <section>
-            <h2 className="text-2xl font-bold mb-3">Our Philosophy</h2>
+            <h2 className="text-2xl font-bold mb-3 text-foreground">Our Philosophy</h2>
             <p>
               QueryNotes is built on a simple yet powerful idea: your notes should be more than just static text. They are a living repository of your knowledge, ideas, and discoveries. By combining an elegant, minimalist design with powerful AI, we create a note-taking experience that is both beautiful to use and incredibly intelligent. We help you unlock the value hidden within your own words.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-3">Core Features</h2>
+            <h2 className="text-2xl font-bold mb-3 text-foreground">Core Features</h2>
             <ul className="list-disc list-inside space-y-2">
               <li><strong>AI-Powered Q&A:</strong> Ask questions directly to your notes and get intelligent, context-aware answers.</li>
               <li><strong>Instant Summaries:</strong> Condense long-form notes into concise summaries with a single click.</li>
@@ -38,7 +36,7 @@ export default function LearnMorePage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-3">Our Vision</h2>
+            <h2 className="text-2xl font-bold mb-3 text-foreground">Our Vision</h2>
             <p>
               We&apos;re just getting started. Our roadmap includes rich text editing, collaboration features, advanced note organization with folders and tags, and even deeper AI integrations to help you connect ideas across your entire knowledge base.
             </p>
@@ -47,7 +45,7 @@ export default function LearnMorePage() {
           <section className="text-center mt-16">
             <Link
               href="/"
-              className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition"
+              className="px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg shadow-md hover:opacity-90 transition-opacity"
             >
               Back to Home
             </Link>
@@ -55,11 +53,11 @@ export default function LearnMorePage() {
         </div>
       </main>
 
-      <footer className="w-full flex flex-col items-center justify-center p-6 border-t">
-        <p className="text-sm text-gray-500 mb-2">
+      <footer className="w-full flex flex-col items-center justify-center p-6 border-t border-border">
+        <p className="text-sm text-muted-foreground mb-2">
           Contact: yifuyuanyf@outlook.com
         </p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Personal Website: yifuyuantech.com
         </p>
       </footer>

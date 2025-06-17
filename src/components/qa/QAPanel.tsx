@@ -16,7 +16,7 @@ type Session = {
 // --- Icon Components ---
 function CloseIcon() {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
     );
@@ -49,9 +49,9 @@ function PlusIcon() {
 function TypingIndicator() {
     return (
         <div className="flex items-center space-x-1.5">
-            <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse [animation-delay:0.1s]"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse [animation-delay:0.2s]"></div>
+            <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse"></div>
+            <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse [animation-delay:0.1s]"></div>
+            <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse [animation-delay:0.2s]"></div>
         </div>
     )
 }
@@ -59,7 +59,7 @@ function TypingIndicator() {
 function CenteredSpinner() {
     return (
         <div className="flex items-center justify-center h-full">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
         </div>
     );
 }
@@ -193,7 +193,7 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed top-0 right-0 w-96 h-screen bg-white shadow-2xl border-l-2 border-gray-300 flex flex-col z-50">
+        <div className="fixed top-0 right-0 w-96 h-screen bg-background shadow-2xl border-l-2 border-border flex flex-col z-50">
             <QASidebar
                 isOpen={isHistoryOpen}
                 onClose={() => setHistoryOpen(false)}
@@ -204,25 +204,25 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
                 sessionsError={sessionsError}
                 onRetry={() => setSessions(null)} // Pass retry handler
             />
-            <header className="flex-shrink-0 flex justify-between items-center p-4 border-b border-gray-200 bg-gray-50">
-                <h3 className="font-semibold text-gray-800">Ask about this note</h3>
-                <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-200" title="Close"><CloseIcon /></button>
+            <header className="flex-shrink-0 flex justify-between items-center p-4 border-b border-border bg-muted">
+                <h3 className="font-semibold text-foreground">Ask about this note</h3>
+                <button onClick={onClose} className="p-2 rounded-full hover:bg-background transition-colors" title="Close"><CloseIcon /></button>
             </header>
             
-            <main className="flex-grow p-4 overflow-y-auto bg-white">
+            <main className="flex-grow p-4 overflow-y-auto bg-background">
                 {isHistoryLoading ? (
                     <CenteredSpinner />
                 ) : messages.length === 0 ? (
-                     <div className="flex items-center justify-center h-full text-gray-500 text-center">
+                     <div className="flex items-center justify-center h-full text-muted-foreground text-center">
                         <div>
                             <p className="mb-2">I can answer any questions about this note.</p>
-                            <p className="text-sm text-gray-400">e.g., &quot;What is the main topic?&quot;</p>
+                            <p className="text-sm opacity-70">e.g., &quot;What is the main topic?&quot;</p>
                         </div>
                     </div>
                 ) : (
                     messages.map((m, index) => (
                         <div key={m.id || `msg-${index}`} className={`mb-4 flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`prose prose-sm max-w-xs inline-block p-3 rounded-2xl ${m.role === 'user' ? 'bg-blue-600 text-white prose-invert' : 'bg-gray-100 text-gray-800 border border-gray-200'}`}>
+                            <div className={`prose prose-sm max-w-xs inline-block p-3 rounded-2xl ${m.role === 'user' ? 'bg-primary text-primary-foreground prose-invert' : 'bg-muted text-foreground border border-border'}`}>
                                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                   {m.content}
                                 </ReactMarkdown>
@@ -232,14 +232,14 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
                 )}
                  {isLoading && messages[messages.length - 1]?.role === 'user' && (
                     <div className="mb-4 flex justify-start">
-                        <div className="max-w-xs inline-block p-3 rounded-2xl bg-gray-100 text-gray-800 border border-gray-200">
+                        <div className="max-w-xs inline-block p-3 rounded-2xl bg-muted text-foreground border border-border">
                            <TypingIndicator/>
                         </div>
                     </div>
                 )}
                 {error && (
                   <div className="mb-4 flex justify-start">
-                      <div className="max-w-xs inline-block p-3 rounded-2xl bg-red-100 text-red-700 border border-red-200">
+                      <div className="max-w-xs inline-block p-3 rounded-2xl bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
                          <p><strong>Error:</strong> {error.message}</p>
                       </div>
                   </div>
@@ -247,12 +247,12 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
                 <div ref={messagesEndRef} />
             </main>
 
-            <footer className="border-t border-gray-200 p-4 bg-gray-50 flex-shrink-0">
+            <footer className="border-t border-border p-4 bg-muted flex-shrink-0">
                 <form onSubmit={customHandleSubmit} className="flex items-center gap-3">
-                    <button type="button" onClick={() => setHistoryOpen(!isHistoryOpen)} className="p-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors" title="History">
+                    <button type="button" onClick={() => setHistoryOpen(!isHistoryOpen)} className="p-3 border border-border rounded-lg hover:bg-background transition-colors" title="History">
                         <HistoryIcon />
                     </button>
-                    <button type="button" onClick={handleNewChat} className="p-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-blue-600" title="New Chat">
+                    <button type="button" onClick={handleNewChat} className="p-3 border border-border rounded-lg hover:bg-background transition-colors text-primary" title="New Chat">
                         <PlusIcon />
                     </button>
                     <input
@@ -261,10 +261,10 @@ export default function QAPanel({ isOpen, onClose, noteId }: { isOpen: boolean; 
                         onChange={handleInputChange}
                         placeholder="Ask a question..."
                         disabled={isLoading}
-                        className="flex-grow w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="flex-grow w-full p-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                         autoComplete="off"
                     />
-                    <button type="submit" disabled={isLoading || !input} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center">
+                    <button type="submit" disabled={isLoading || !input} className="bg-primary hover:opacity-90 text-primary-foreground font-semibold p-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-opacity flex items-center justify-center">
                         <SendIcon />
                     </button>
                 </form>

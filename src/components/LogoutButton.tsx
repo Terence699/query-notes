@@ -8,8 +8,8 @@ export function LogoutButton() {
 
   return (
     <form action={signOut}>
-        <button 
-            className="py-2 px-4 rounded-md no-underline bg-gray-200 hover:bg-gray-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        <button
+            className="py-2 px-4 rounded-md no-underline bg-secondary text-secondary-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             disabled={pending}
         >
             {pending ? 'Logging out...' : 'Logout'}

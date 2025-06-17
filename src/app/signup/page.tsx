@@ -63,7 +63,7 @@ export default async function Signup({
           Email
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="rounded-md px-4 py-2 bg-background border border-border text-foreground mb-6 focus:outline-none focus:ring-2 focus:ring-primary"
           name="email"
           placeholder="you@example.com"
           required
@@ -72,20 +72,20 @@ export default async function Signup({
           Password
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="rounded-md px-4 py-2 bg-background border border-border text-foreground mb-6 focus:outline-none focus:ring-2 focus:ring-primary"
           type="password"
           name="password"
           placeholder="••••••••"
           required
         />
-        <button className="bg-indigo-600 rounded-md px-4 py-2 text-white mb-2">
+        <button className="bg-primary rounded-md px-4 py-2 text-primary-foreground mb-2 hover:opacity-90 transition-opacity">
           Sign Up
         </button>
-        <Link href="/login" className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2 text-center">
+        <Link href="/login" className="border border-border rounded-md px-4 py-2 text-foreground mb-2 text-center hover:bg-muted transition-colors">
           Already have an account? Sign In
         </Link>
         {params?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+          <p className="mt-4 p-4 bg-muted text-foreground text-center rounded-md">
             {params.message}
           </p>
         )}

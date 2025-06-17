@@ -8,7 +8,7 @@ export function NewNoteButton() {
   return (
     <button
       type="submit"
-      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md text-sm disabled:bg-blue-400 disabled:cursor-not-allowed"
+      className="bg-primary hover:opacity-90 text-primary-foreground font-semibold py-2 px-4 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
       disabled={pending}
     >
       {pending ? 'Creating...' : '+ New Note'}

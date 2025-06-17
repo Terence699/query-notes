@@ -76,6 +76,9 @@ We are building a full-featured note-taking application inspired by the simplici
 **AI Feature Upgrades:**
 * [X] **Smart Q&A History**: Add session management to the Q&A panel to save, view, and manage past conversations.
 
+**User Experience Enhancements:**
+* [X] **Dark Mode & Theme Switching**: Complete theme system with light/dark mode toggle, system preference detection, and persistent theme settings across sessions.
+
 ### **Phase 3: Advanced AI & Enterprise Features (Future Plans)**
 
 **AI Enhancements:**
@@ -252,4 +255,30 @@ This disciplined approach ensures that the "contract" between parent and child c
 
 ---
 
-In the entire process, always refer to the [Next.js official documentation](https://nextjs.org/docs) to ensure the latest Next.js 15 best practices are used. 
+### **Record 9: Implementing Comprehensive Theme Switching with Hydration-Safe Architecture**
+
+*   **Symptom:** When implementing a dark mode theme switching feature, the application encountered hydration errors with `useTheme must be used within a ThemeProvider` and layout shifts during initial page load.
+
+*   **Root Cause:**
+    1.  **Client-Server Boundary Violations:** Theme toggle components were being rendered in server components before the ThemeProvider context was available, causing context access errors.
+    2.  **Hydration Mismatches:** Theme state was being applied during server-side rendering without proper hydration handling, causing inconsistencies between server and client rendering.
+    3.  **Layout Shifts:** Theme-dependent components rendered with different dimensions before and after hydration, causing visual jumps.
+
+*   **Solution:** A comprehensive theme architecture was implemented with proper hydration handling:
+    1.  **CSS Custom Properties Approach:** Instead of relying solely on Tailwind's dark mode classes, implemented a CSS custom properties system that works seamlessly with both light and dark themes, ensuring consistent styling across all components.
+    2.  **Hydration-Safe Theme Provider:** Created a ThemeProvider that properly handles server-side rendering by preventing theme application until after component mounting, avoiding hydration mismatches.
+    3.  **Client-Only Theme Components:** Developed a `ClientThemeToggle` wrapper component that only renders the actual theme toggle after hydration is complete, with a placeholder to prevent layout shifts.
+    4.  **System Preference Detection:** Implemented automatic detection of user's system theme preference with proper fallbacks and localStorage persistence.
+    5.  **Comprehensive Component Updates:** Systematically updated all UI components to use theme-aware CSS classes, ensuring consistent appearance across light and dark modes.
+
+*   **Key Technical Decisions:**
+    *   Used React Context for theme state management with proper TypeScript typing.
+    *   Implemented theme persistence using localStorage with error handling.
+    *   Created reusable navigation components that work across different page types.
+    *   Ensured accessibility with proper contrast ratios and focus states in both themes.
+
+This implementation provides a professional-grade theme switching experience that respects user preferences, persists across sessions, and maintains visual consistency throughout the application.
+
+---
+
+In the entire process, always refer to the [Next.js official documentation](https://nextjs.org/docs) to ensure the latest Next.js 15 best practices are used.
