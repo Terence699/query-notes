@@ -7,10 +7,11 @@ import { createNote } from "@/actions/notes";
 import NotesSearchPage from "@/components/NotesSearchPage";
 import { NewNoteButton } from "@/components/NewNoteButton";
 import Navigation from "@/components/Navigation";
+import { Note } from "@/types/note";
 
 // 这是一个客户端组件，用于显示用户的笔记列表
 export default function NotesPage() {
-  const [notes, setNotes] = useState<any[] | null>(null);
+  const [notes, setNotes] = useState<Note[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
