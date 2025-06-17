@@ -81,6 +81,8 @@ We are building a full-featured note-taking application inspired by the simplici
 
 **User Experience Enhancements:**
 * [X] **Dark Mode & Theme Switching**: Complete theme system with light/dark mode toggle, system preference detection, and persistent theme settings across sessions.
+* [X] **Dark Mode Rendering Fixes**: Resolved all dark mode rendering issues with comprehensive theme-aware styling, three-layer design pattern support, and proper CSS variable system.
+* [X] **Streamlined Navigation**: Redesigned "New Note" button as minimalist purple "+" icon and relocated from header to notes list area for better contextual placement and user experience.
 
 ### **Phase 3: Advanced AI & Enterprise Features (Future Plans)**
 
@@ -119,16 +121,16 @@ Our goal is to create an application that is not only powerful but also exemplar
 *   **Design Inspiration:** **Apple Design Language**. We draw inspiration from Apple's Human Interface Guidelines (HIG) to pursue a simple, intuitive, and efficient user experience.
 *   **Core Style:** **Elegant & Minimalist**. We believe content is king. The UI should recede, becoming a stage for the content, not a distraction. We achieve this through ample whitespace, clear visual hierarchy, and attention to detail.
 *   **Color Strategy:** We use **neutral colors** (black, white, and various shades of gray) as the foundation of the interface, accented with a **single shade of blue** for interactive elements like buttons and links. This ensures visual harmony and focus.
-*   **Typography:** We use a clean, legible sans-serif font (Inter with comprehensive system font fallbacks) to ensure a first-class reading experience on any device with reliable offline performance.
+*   **Typography:** We use a clean, legible system font stack (optimized for each platform) to ensure a first-class reading experience on any device with reliable offline performance and instant loading.
 
 ## Modern UI Architecture
 
 We've implemented a sophisticated **three-layer visual hierarchy** that creates depth and premium feel throughout the application:
 
 ### **Layer Structure:**
-*   **Layer 1 (Page Background):** Very light neutral background (`bg-slate-50`) that serves as the foundation
-*   **Layer 2 (Canvas Container):** Soft grey container (`bg-zinc-100`) with rounded corners and shadows that acts as the content canvas
-*   **Layer 3 (Content Cards):** White cards with subtle blue gradients (`from-blue-50 to-white`) that appear to float above the canvas
+*   **Layer 1 (Page Background):** Theme-aware foundation using CSS custom properties (`bg-page`) that adapts to light/dark modes
+*   **Layer 2 (Canvas Container):** Adaptive container (`bg-canvas`) with rounded corners and shadows that acts as the content canvas
+*   **Layer 3 (Content Cards):** Theme-aware cards with sophisticated gradients (`bg-card-gradient`) that appear to float above the canvas
 
 ### **Premium Styling Features:**
 *   **Rounded Design Language:** Extensive use of `rounded-2xl` corners for a modern, approachable feel
@@ -365,6 +367,46 @@ This implementation provides a professional-grade theme switching experience tha
     *   **Font System Optimization:** Replaced Google Fonts with reliable Inter font and system fallbacks for better performance
 
 *   **Result:** The application now embodies Apple's design philosophy where "simplicity is the ultimate sophistication," creating an interface that truly recedes to let content be the hero while providing delightful, purposeful interactions.
+
+---
+
+### **Record 11: Comprehensive Dark Mode Implementation & Navigation Optimization**
+
+*   **Symptom:** Dark mode rendering issues were causing visual inconsistencies, with hardcoded light colors breaking the user experience in dark theme. Additionally, the "New Note" button placement in the navigation header felt disconnected from the actual notes content area.
+
+*   **Root Cause:**
+    1.  **Hardcoded Color Dependencies:** Many components used hardcoded Tailwind classes like `bg-slate-50`, `text-gray-600`, and `from-blue-50 to-white` that didn't respond to theme changes
+    2.  **Incomplete CSS Variable System:** The existing theme system lacked comprehensive support for complex gradients and three-layer design patterns
+    3.  **Poor Contextual Placement:** The "New Note" button in the header wasn't visually associated with the notes list it affected
+    4.  **External Font Dependencies:** Google Fonts dependency caused network connectivity issues and deployment problems
+
+*   **Solution:** A systematic approach to theme consistency and user experience optimization:
+    1.  **Enhanced CSS Variable System:**
+        *   Added comprehensive CSS custom properties for three-layer design (`--color-page-background`, `--color-canvas-background`, `--color-card-gradient-from/to`)
+        *   Created utility classes (`bg-page`, `bg-canvas`, `bg-card-gradient`) for consistent theming
+        *   Ensured all color variables work seamlessly in both light and dark modes
+    2.  **Component-Level Theme Fixes:**
+        *   Updated all hardcoded colors in NotesList, SearchBar, Pagination, QASidebar, and loading components
+        *   Replaced static gradients with theme-aware alternatives
+        *   Fixed loading spinners and skeleton components to use proper theme colors
+    3.  **Navigation UX Optimization:**
+        *   Redesigned "New Note" button as minimalist purple "+" icon for cleaner aesthetics
+        *   Relocated button from navigation header to notes list area for better contextual placement
+        *   Positioned button alongside pagination info for immediate visual association with notes content
+        *   Added button to empty states for consistent accessibility
+    4.  **Font System Optimization:**
+        *   Removed Google Fonts dependency to eliminate network connectivity issues
+        *   Implemented robust system font stack optimized for each platform
+        *   Ensured instant font loading and offline reliability
+
+*   **Key Technical Achievements:**
+    *   **Theme Consistency:** All UI elements now properly adapt to light/dark modes with smooth transitions
+    *   **Better UX:** "New Note" button placement creates immediate visual connection with notes list
+    *   **Performance:** Eliminated external font dependencies for faster loading and better reliability
+    *   **Accessibility:** Maintained proper contrast ratios and ARIA labels across all theme states
+    *   **Production Ready:** Resolved ESLint compliance issues and deployment blockers
+
+*   **Result:** The application now provides a seamless, professional-grade dark mode experience with optimized navigation patterns that feel intuitive and contextually appropriate, while maintaining excellent performance and reliability.
 
 ---
 
