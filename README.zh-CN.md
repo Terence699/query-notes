@@ -8,7 +8,7 @@
 
 我们将构建一个功能完善的笔记应用，其灵感来源于 Apple Notes 的简洁与强大，并由 AI 赋予前所未有的智能。开发分为以下几个阶段：
 
-### **Phase 1: 核心功能与 AI 智能 (当前阶段 - 98% 完成)**
+### **Phase 1: 核心功能与 AI 智能 (已完成 ✅)**
 
 **用户认证系统:**
 
@@ -16,6 +16,8 @@
 * [X] 用户会话管理
 * [X] 公共/私有路由保护
 * [X] 统一的用户入口流程
+* [X] **专业邮件系统**: 通过 Resend 从 `notifications@mail.querynotes.top` 发送专业邮件
+* [X] **邮件 Webhook 集成**: 无缝的 Supabase Auth + Resend 集成与自定义域名
 
 **基础笔记管理:**
 
@@ -47,14 +49,16 @@
 * [X] Vercel AI SDK v3 集成
 * [X] TypeScript 类型安全
 
-**待完成 (Phase 1 收尾):**
+**Phase 1 成就 (已完成 ✅):**
 
 * [X] **端到端流程测试 (End-to-End Testing):** 全面测试用户流程，确保所有功能（注册、登录、笔记创建/编辑/删除、搜索、分页、AI功能）均按预期工作，并验证应用响应速度。
 * [X] **生产环境部署 (Production Deployment):** 将应用部署到 Vercel 平台，完成 Phase 1 的正式发布。
 * [X] **现代分层 UI 设计**: 实现了精致的三层视觉层次结构，包含高端样式、微妙渐变和增强的交互元素。
 * [X] **Apple 风格 UI 精细化**: 基于 Apple 首席设计师反馈的全面 UI 优化，包括优雅的用户认证显示、精简的搜索界面、带悬停效果的精致笔记卡片，以及统一的设计语言。
 * [X] **笔记编辑器布局重设计**: 重构编辑器布局以优先考虑写作流程，重新定位 AI 摘要部分，并增强带有精致交互的浮动聊天按钮。
-* [ ] **完成 AI 界面重设计**: 完成现代聊天界面的实现，包括改进的消息气泡和精简的操作栏。
+* [X] **完成 AI 界面重设计**: 完成现代聊天界面的实现，包括改进的消息气泡和精简的操作栏。
+* [X] **专业邮件系统**: 集成 Resend 实现自定义域名邮件与 Webhook 架构。
+* [X] **生产就绪基础设施**: 自定义域名、SSL、CDN 和专业邮件投递系统。
 
 ### **Phase 2: 高级功能与用户体验 (下一阶段)**
 
@@ -125,9 +129,11 @@
 * **UI:** [Tailwind CSS](https://tailwindcss.com/)
 * **数据库:** [Supabase](https://supabase.io/) (Postgres)
 * **认证:** [Supabase Auth](https://supabase.io/docs/guides/auth)
+* **邮件服务:** [Resend](https://resend.com/) (自定义域名: `mail.querynotes.top`)
 * **AI:** [SiliconFlow](https://siliconflow.cn/) + [DeepSeek API](https://www.deepseek.com/) (智能故障转移)
 * **AI SDK:** [Vercel AI SDK v3](https://sdk.vercel.ai/)
 * **部署:** [Vercel](https://vercel.com/)
+* **DNS & CDN:** [Cloudflare](https://cloudflare.com/)
 
 ## 设计原则 (Design Principles)
 
@@ -487,3 +493,52 @@
   * **生产就绪:** 解决了 ESLint 合规性问题和部署阻塞因素
 
 * **结果:** 应用现在提供了无缝、专业级的深色模式体验，配合优化的导航模式，感觉直观且上下文适当，同时保持出色的性能和可靠性。
+
+---
+
+### **记录 11: 实现专业邮件系统与 Resend 集成**
+
+* **问题描述 (Symptom):**
+
+  * Supabase 的默认邮件系统有严重的速率限制（每小时3封邮件），导致用户注册失败和糟糕的用户体验。通用的 Supabase 邮件也缺乏专业品牌形象。
+
+* **根源分析 (Root Cause):**
+
+  1. **速率限制:** Supabase 的内置邮件服务是为开发设计的，不适用于生产环境
+  2. **通用品牌:** 默认邮件来自 Supabase 域名，没有自定义品牌
+  3. **可靠性问题:** 邮件投递不一致且经常延迟
+  4. **无自定义域名:** 邮件没有品牌发件人地址，显得不专业
+
+* **解决方案 (Solution):**
+
+  使用 Resend 和 Webhook 架构实现了全面的自定义邮件系统：
+
+  1. **自定义域名设置:**
+     * 通过 Cloudflare DNS 配置 `mail.querynotes.top` 子域名
+     * 通过 Resend 验证域名所有权以实现专业邮件投递
+     * 设置适当的 SPF、DKIM 和 DMARC 记录进行邮件认证
+
+  2. **Webhook 架构:**
+     * 创建 `/api/auth/send-email` 端点处理 Supabase 认证 Webhook
+     * 使用 Supabase 的 Hook 密钥实现安全的 Webhook 验证
+     * 构建带有专业品牌的自定义 HTML 邮件模板
+
+  3. **中间件配置:**
+     * 更新 Next.js 中间件以允许 API 路由作为公共路径
+     * 修复阻止 Webhook 调用的认证重定向问题
+     * 确保自定义域名集成的正确请求路由
+
+  4. **生产部署:**
+     * 配置 Supabase 认证钩子使用生产 Webhook URL
+     * 设置 Resend API 集成的环境变量
+     * 测试完整的注册流程与真实邮件投递
+
+* **关键技术实现:**
+
+  * **Webhook 安全:** 实现适当的密钥验证以防止未授权的邮件发送
+  * **错误处理:** 添加全面的错误处理和详细日志记录以便调试
+  * **邮件模板:** 创建带有 QueryNotes 品牌的响应式 HTML 模板
+  * **域名配置:** 设置适当的 DNS 记录和域名验证
+  * **速率限制解决方案:** 通过 Resend 的慷慨配额消除了 Supabase 的3封邮件限制
+
+* **结果:** 用户现在从 `notifications@mail.querynotes.top` 收到专业的品牌邮件，具有可靠的投递、无限的发送容量和无缝的注册体验，提升了整体应用的可信度。

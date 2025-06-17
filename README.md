@@ -8,13 +8,15 @@ QueryNotes is a modern, high-performance, intelligent note-taking application bu
 
 We are building a full-featured note-taking application inspired by the simplicity and power of Apple Notes, supercharged with AI. Development is divided into the following phases:
 
-### **Phase 1: Core Functionality & AI Intelligence (Current Stage - 98% Complete)**
+### **Phase 1: Core Functionality & AI Intelligence (COMPLETE ✅)**
 
 **User Authentication:**
 * [X] Email/Password Registration & Login (English UI)
 * [X] User Session Management
 * [X] Public/Private Route Protection
 * [X] Unified User Entry Flow
+* [X] **Custom Email System**: Professional emails via Resend from `notifications@mail.querynotes.top`
+* [X] **Email Webhook Integration**: Seamless Supabase Auth + Resend integration with custom domain
 
 **Basic Note Management:**
 * [X] Clean & Efficient Note List View
@@ -42,13 +44,15 @@ We are building a full-featured note-taking application inspired by the simplici
 * [X] Vercel AI SDK v3 Integration
 * [X] TypeScript Type Safety
 
-**To-Do (Phase 1 Wrap-up):**
+**Phase 1 Achievements (COMPLETE ✅):**
 * [X] **End-to-End Testing:** Thoroughly test the user flow to ensure all features work as expected and verify app responsiveness.
 * [X] **Production Deployment:** Deploy the application to Vercel to mark the official release of Phase 1.
 * [X] **Modern Layered UI Design**: Implemented a sophisticated three-layer visual hierarchy with premium styling, subtle gradients, and enhanced interactive elements.
 * [X] **Apple-Inspired UI Refinements**: Comprehensive UI optimization based on Apple Chief Designer feedback, including elegant user authentication display, streamlined search interface, refined note cards with hover effects, and cohesive design language.
 * [X] **Note Editor Layout Redesign**: Restructured editor layout to prioritize writing flow, relocated AI summary section, and enhanced floating chat button with sophisticated interactions.
-* [ ] **Complete AI Interface Redesign**: Finish implementing modern chat interface with improved message bubbles and streamlined action bars.
+* [X] **Complete AI Interface Redesign**: Modern chat interface with improved message bubbles and streamlined action bars.
+* [X] **Professional Email System**: Integrated Resend for custom domain emails with webhook architecture.
+* [X] **Production-Ready Infrastructure**: Custom domain, SSL, CDN, and professional email delivery system.
 
 ### **Phase 2: Advanced Features & User Experience (Next Stage)**
 
@@ -110,9 +114,79 @@ We are building a full-featured note-taking application inspired by the simplici
 *   **UI:** [Tailwind CSS](https://tailwindcss.com/)
 *   **Database:** [Supabase](https://supabase.io/) (Postgres)
 *   **Authentication:** [Supabase Auth](https://supabase.io/docs/guides/auth)
+*   **Email Service:** [Resend](https://resend.com/) (Custom domain: `mail.querynotes.top`)
 *   **AI:** [SiliconFlow](https://siliconflow.cn/) + [DeepSeek API](https://www.deepseek.com/) (with intelligent failover)
 *   **AI SDK:** [Vercel AI SDK v3](https://sdk.vercel.ai/)
 *   **Deployment:** [Vercel](https://vercel.com/)
+*   **DNS & CDN:** [Cloudflare](https://cloudflare.com/)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm, yarn, or pnpm
+- Supabase account
+- OpenAI API key (or SiliconFlow/DeepSeek)
+- Resend account (for custom emails)
+- Custom domain (optional but recommended)
+
+### Installation
+
+1. **Clone the repository:**
+```bash
+git clone https://github.com/Terence699/query-notes.git
+cd query-notes
+```
+
+2. **Install dependencies:**
+```bash
+npm install
+```
+
+3. **Set up environment variables:**
+```bash
+cp .env.example .env.local
+```
+
+Fill in your environment variables:
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# AI Configuration (Choose one or both)
+OPENAI_API_KEY=your_openai_api_key
+SILICONFLOW_API_KEY=your_siliconflow_api_key
+DEEPSEEK_API_KEY=your_deepseek_api_key
+
+# Email Configuration (Resend)
+RESEND_API_KEY=your_resend_api_key
+NEXT_PUBLIC_EMAIL_DOMAIN=mail.yourdomain.com
+
+# Site Configuration
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+4. **Run the development server:**
+```bash
+npm run dev
+```
+
+5. **Open [http://localhost:3000](http://localhost:3000)** in your browser.
+
+### Database Setup
+
+1. **Create a new Supabase project**
+2. **Set up the database schema** (tables will be created automatically on first use)
+3. **Configure Row Level Security (RLS)** policies
+4. **Set up authentication settings**
+
+### Email Integration (Optional)
+
+1. **Set up Resend account** and verify your domain
+2. **Configure Supabase email webhook** to use your custom domain
+3. **Test email delivery** with the signup flow
 
 ## Design Principles
 
@@ -407,6 +481,45 @@ This implementation provides a professional-grade theme switching experience tha
     *   **Production Ready:** Resolved ESLint compliance issues and deployment blockers
 
 *   **Result:** The application now provides a seamless, professional-grade dark mode experience with optimized navigation patterns that feel intuitive and contextually appropriate, while maintaining excellent performance and reliability.
+
+---
+
+### **Record 12: Implementing Professional Email System with Resend Integration**
+
+*   **Symptom:** Supabase's default email system had severe rate limiting (3 emails per hour), causing user signup failures and poor user experience. The generic Supabase emails also lacked professional branding.
+
+*   **Root Cause:**
+    1.  **Rate Limiting:** Supabase's built-in email service is designed for development, not production use
+    2.  **Generic Branding:** Default emails came from Supabase domains without custom branding
+    3.  **Reliability Issues:** Email delivery was inconsistent and often delayed
+    4.  **No Custom Domain:** Emails appeared unprofessional without branded sender addresses
+
+*   **Solution:** Implemented a comprehensive custom email system using Resend with webhook architecture:
+    1.  **Custom Domain Setup:**
+        *   Configured `mail.querynotes.top` subdomain via Cloudflare DNS
+        *   Verified domain ownership with Resend for professional email delivery
+        *   Set up proper SPF, DKIM, and DMARC records for email authentication
+    2.  **Webhook Architecture:**
+        *   Created `/api/auth/send-email` endpoint to handle Supabase auth webhooks
+        *   Implemented secure webhook validation using Supabase's hook secrets
+        *   Built custom HTML email templates with professional branding
+    3.  **Middleware Configuration:**
+        *   Updated Next.js middleware to allow API routes as public paths
+        *   Fixed authentication redirect issues that were blocking webhook calls
+        *   Ensured proper request routing for custom domain integration
+    4.  **Production Deployment:**
+        *   Configured Supabase auth hooks to use production webhook URL
+        *   Set up environment variables for Resend API integration
+        *   Tested complete signup flow with real email delivery
+
+*   **Key Technical Implementations:**
+    *   **Webhook Security:** Implemented proper secret validation to prevent unauthorized email sending
+    *   **Error Handling:** Added comprehensive error handling with detailed logging for debugging
+    *   **Email Templates:** Created responsive HTML templates with QueryNotes branding
+    *   **Domain Configuration:** Set up proper DNS records and domain verification
+    *   **Rate Limit Solution:** Eliminated Supabase's 3-email limit with Resend's generous quotas
+
+*   **Result:** Users now receive professional, branded emails from `notifications@mail.querynotes.top` with reliable delivery, unlimited sending capacity, and a seamless signup experience that enhances the overall application credibility.
 
 ---
 
