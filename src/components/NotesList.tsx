@@ -208,7 +208,7 @@ export default function NotesList({ initialNotes, searchResults, isSearching, on
         <>
           <h2 className="text-xl font-semibold text-card-foreground">Your notebook is empty</h2>
           <p className="mt-2 text-muted-foreground">
-            Click the "+" button below to create your first note.
+            Click the &quot;+&quot; button below to create your first note.
           </p>
           <div className="mt-6">
             <form action={createNoteAction}>
