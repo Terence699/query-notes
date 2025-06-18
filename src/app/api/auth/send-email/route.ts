@@ -146,7 +146,20 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('Email sent successfully via Resend');
-    return NextResponse.json({ success: true, data: result.data });
+
+    // Return debug info in response for easier debugging
+    return NextResponse.json({
+      success: true,
+      data: result.data,
+      debug: {
+        email_to,
+        email_action_type,
+        confirmation_url,
+        url_has_code: confirmation_url?.includes('code='),
+        payload_keys: Object.keys(verifiedData || {}),
+        email_data_keys: email_data ? Object.keys(email_data) : []
+      }
+    });
   } catch (error) {
     console.error('Email webhook error:', error);
     return NextResponse.json(
