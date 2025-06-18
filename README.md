@@ -17,6 +17,7 @@ We are building a full-featured note-taking application inspired by the simplici
 * [X] Unified User Entry Flow
 * [X] **Custom Email System**: Professional emails via Resend from `notifications@mail.querynotes.top`
 * [X] **Email Webhook Integration**: Seamless Supabase Auth + Resend integration with custom domain
+* [X] **Production Email Authentication**: Fixed webhook payload validation and token-based email confirmation flow
 
 **Basic Note Management:**
 * [X] Clean & Efficient Note List View
@@ -163,6 +164,9 @@ DEEPSEEK_API_KEY=your_deepseek_api_key
 # Email Configuration (Resend)
 RESEND_API_KEY=your_resend_api_key
 NEXT_PUBLIC_EMAIL_DOMAIN=mail.yourdomain.com
+
+# Webhook Secret for Supabase Auth Hooks (get from Supabase Dashboard > Authentication > Hooks)
+SEND_EMAIL_HOOK_SECRET=your_supabase_webhook_secret_hex_string
 
 # Site Configuration
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
@@ -520,6 +524,44 @@ This implementation provides a professional-grade theme switching experience tha
     *   **Rate Limit Solution:** Eliminated Supabase's 3-email limit with Resend's generous quotas
 
 *   **Result:** Users now receive professional, branded emails from `notifications@mail.querynotes.top` with reliable delivery, unlimited sending capacity, and a seamless signup experience that enhances the overall application credibility.
+
+---
+
+### **Record 13: Debugging Production Authentication - Webhook Payload Validation & Token-Based Confirmation**
+
+*   **Symptom:** Production signup process was failing with "Invalid payload sent to hook" error, followed by "Hook requires authorization token" error. Email confirmation links were missing the required authentication parameters, causing "No code parameter found in callback" errors.
+
+*   **Root Cause:**
+    1.  **Missing Webhook Validation:** The `/api/auth/send-email` endpoint lacked proper webhook signature validation, causing Supabase to reject the webhook calls as unauthorized
+    2.  **Incorrect Authentication Flow:** The system was expecting OAuth-style `code` parameters, but Supabase email confirmations use token-based authentication with `token_hash` and `type` parameters
+    3.  **URL Construction Issues:** The webhook was not properly constructing confirmation URLs with the required authentication tokens from Supabase's payload
+    4.  **Environment Configuration:** Production environment variables were not properly configured for webhook authentication
+
+*   **Solution:** Implemented comprehensive webhook authentication and token-based confirmation flow:
+    1.  **Webhook Security Implementation:**
+        *   Added `standardwebhooks` library for proper payload validation
+        *   Implemented hex-to-base64 secret conversion to handle Supabase's webhook secret format
+        *   Added comprehensive error handling and logging for webhook verification failures
+    2.  **Token-Based Authentication Flow:**
+        *   Updated auth callback to handle both `code` (OAuth) and `token_hash` (email confirmation) authentication methods
+        *   Implemented `verifyOtp()` for email confirmations instead of `exchangeCodeForSession()`
+        *   Added proper TypeScript typing for Supabase's OTP verification types
+    3.  **URL Construction Fix:**
+        *   Modified webhook to construct proper confirmation URLs using `token_hash`, `type`, and `token` parameters from Supabase's payload
+        *   Added URL parameter validation and logging to debug confirmation link generation
+        *   Ensured confirmation URLs include all required authentication data
+    4.  **Production Configuration:**
+        *   Updated Supabase `uri_allow_list` to include specific callback URLs
+        *   Configured proper environment variables for webhook secrets
+        *   Added comprehensive debugging and logging for production troubleshooting
+
+*   **Key Technical Implementations:**
+    *   **Webhook Validation:** Used `standardwebhooks` library with proper secret handling for Supabase's hex format
+    *   **Dual Authentication Support:** Auth callback now handles both OAuth flows and email confirmation flows seamlessly
+    *   **Enhanced Debugging:** Added detailed logging throughout the authentication pipeline for easier troubleshooting
+    *   **Environment Flexibility:** System works with both development and production webhook configurations
+
+*   **Result:** The signup and email confirmation flow now works flawlessly in production, with users receiving properly formatted confirmation emails that successfully authenticate and redirect to the application homepage with a welcome message.
 
 ---
 

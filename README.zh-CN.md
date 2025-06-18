@@ -18,6 +18,7 @@
 * [X] 统一的用户入口流程
 * [X] **专业邮件系统**: 通过 Resend 从 `notifications@mail.querynotes.top` 发送专业邮件
 * [X] **邮件 Webhook 集成**: 无缝的 Supabase Auth + Resend 集成与自定义域名
+* [X] **生产环境邮件认证**: 修复了 Webhook 载荷验证和基于令牌的邮件确认流程
 
 **基础笔记管理:**
 
@@ -497,6 +498,101 @@
 ---
 
 ### **记录 11: 实现专业邮件系统与 Resend 集成**
+
+* **问题描述 (Symptom):**
+
+  * Supabase 的默认邮件系统有严重的速率限制（每小时3封邮件），导致用户注册失败和糟糕的用户体验。通用的 Supabase 邮件也缺乏专业品牌形象。
+
+* **根源分析 (Root Cause):**
+
+  1. **速率限制:** Supabase 的内置邮件服务是为开发而非生产使用设计的
+  2. **通用品牌:** 默认邮件来自 Supabase 域名，没有自定义品牌
+  3. **可靠性问题:** 邮件投递不一致且经常延迟
+  4. **无自定义域名:** 邮件显得不专业，没有品牌发件人地址
+
+* **解决方案 (Solution):**
+
+  使用 Resend 和 Webhook 架构实现了全面的自定义邮件系统：
+
+  1. **自定义域名设置:**
+     * 通过 Cloudflare DNS 配置 `mail.querynotes.top` 子域名
+     * 通过 Resend 验证域名所有权以实现专业邮件投递
+     * 设置适当的 SPF、DKIM 和 DMARC 记录进行邮件认证
+
+  2. **Webhook 架构:**
+     * 创建 `/api/auth/send-email` 端点处理 Supabase 认证 Webhook
+     * 使用 Supabase 的 Hook 密钥实现安全的 Webhook 验证
+     * 构建带有专业品牌的自定义 HTML 邮件模板
+
+  3. **中间件配置:**
+     * 更新 Next.js 中间件以允许 API 路由作为公共路径
+     * 修复了阻止 Webhook 调用的认证重定向问题
+     * 确保自定义域名集成的正确请求路由
+
+  4. **生产部署:**
+     * 配置 Supabase 认证 Hook 使用生产 Webhook URL
+     * 设置 Resend API 集成的环境变量
+     * 测试完整的注册流程和真实邮件投递
+
+* **关键技术实现:**
+
+  * **Webhook 安全:** 实现适当的密钥验证以防止未授权的邮件发送
+  * **错误处理:** 添加全面的错误处理和详细的调试日志
+  * **邮件模板:** 创建带有 QueryNotes 品牌的响应式 HTML 模板
+  * **域名配置:** 设置适当的 DNS 记录和域名验证
+  * **速率限制解决方案:** 通过 Resend 的慷慨配额消除了 Supabase 的3封邮件限制
+
+* **结果:** 用户现在从 `notifications@mail.querynotes.top` 收到专业的品牌邮件，具有可靠的投递、无限的发送容量和无缝的注册体验，增强了整体应用的可信度。
+
+---
+
+### **记录 12: 调试生产环境认证 - Webhook 载荷验证与基于令牌的确认**
+
+* **问题描述 (Symptom):**
+
+  * 生产环境注册流程失败，出现"Invalid payload sent to hook"错误，随后出现"Hook requires authorization token"错误。邮件确认链接缺少必需的认证参数，导致"No code parameter found in callback"错误。
+
+* **根源分析 (Root Cause):**
+
+  1. **缺少 Webhook 验证:** `/api/auth/send-email` 端点缺乏适当的 Webhook 签名验证，导致 Supabase 将 Webhook 调用拒绝为未授权
+  2. **错误的认证流程:** 系统期望 OAuth 风格的 `code` 参数，但 Supabase 邮件确认使用基于令牌的认证，使用 `token_hash` 和 `type` 参数
+  3. **URL 构造问题:** Webhook 没有正确构造包含来自 Supabase 载荷的必需认证令牌的确认 URL
+  4. **环境配置:** 生产环境变量没有正确配置 Webhook 认证
+
+* **解决方案 (Solution):**
+
+  实现了全面的 Webhook 认证和基于令牌的确认流程：
+
+  1. **Webhook 安全实现:**
+     * 添加 `standardwebhooks` 库进行适当的载荷验证
+     * 实现十六进制到 base64 的密钥转换以处理 Supabase 的 Webhook 密钥格式
+     * 添加全面的错误处理和 Webhook 验证失败的日志记录
+
+  2. **基于令牌的认证流程:**
+     * 更新认证回调以处理 `code`（OAuth）和 `token_hash`（邮件确认）认证方法
+     * 为邮件确认实现 `verifyOtp()` 而不是 `exchangeCodeForSession()`
+     * 为 Supabase 的 OTP 验证类型添加适当的 TypeScript 类型定义
+
+  3. **URL 构造修复:**
+     * 修改 Webhook 以使用来自 Supabase 载荷的 `token_hash`、`type` 和 `token` 参数构造适当的确认 URL
+     * 添加 URL 参数验证和日志记录以调试确认链接生成
+     * 确保确认 URL 包含所有必需的认证数据
+
+  4. **生产配置:**
+     * 更新 Supabase `uri_allow_list` 以包含特定的回调 URL
+     * 配置 Webhook 密钥的适当环境变量
+     * 添加全面的调试和生产故障排除日志
+
+* **关键技术实现:**
+
+  * **Webhook 验证:** 使用 `standardwebhooks` 库，为 Supabase 的十六进制格式提供适当的密钥处理
+  * **双重认证支持:** 认证回调现在无缝处理 OAuth 流程和邮件确认流程
+  * **增强调试:** 在整个认证管道中添加详细日志记录，便于故障排除
+  * **环境灵活性:** 系统适用于开发和生产 Webhook 配置
+
+* **结果:** 注册和邮件确认流程现在在生产环境中完美运行，用户收到格式正确的确认邮件，成功认证并重定向到应用主页并显示欢迎消息。
+
+---
 
 * **问题描述 (Symptom):**
 
