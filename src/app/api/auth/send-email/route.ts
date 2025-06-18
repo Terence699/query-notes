@@ -102,14 +102,33 @@ export async function POST(request: NextRequest) {
     }
 
     const email_to = user.email;
-    const confirmation_url = email_data.redirect_to;
     const email_action_type = email_data.email_action_type;
+
+    // Construct the proper confirmation URL with the token parameters
+    // Supabase expects: redirect_to?token_hash=...&type=signup
+    const baseUrl = email_data.redirect_to;
+    const tokenHash = email_data.token_hash;
+    const token = email_data.token;
+
+    let confirmation_url = baseUrl;
+    if (tokenHash) {
+      const urlParams = new URLSearchParams();
+      urlParams.append('token_hash', tokenHash);
+      urlParams.append('type', email_action_type);
+      if (token) {
+        urlParams.append('token', token);
+      }
+      confirmation_url = `${baseUrl}?${urlParams.toString()}`;
+    }
 
     console.log('=== EXTRACTED DATA ===');
     console.log('Email to:', email_to);
     console.log('Action type:', email_action_type);
-    console.log('Confirmation URL:', confirmation_url);
-    console.log('URL has code param:', confirmation_url?.includes('code='));
+    console.log('Base URL:', baseUrl);
+    console.log('Token hash:', tokenHash);
+    console.log('Token:', token);
+    console.log('Final confirmation URL:', confirmation_url);
+    console.log('URL has token_hash:', confirmation_url?.includes('token_hash='));
     console.log('=== END EXTRACTED DATA ===');
 
     if (!email_to || !confirmation_url) {
